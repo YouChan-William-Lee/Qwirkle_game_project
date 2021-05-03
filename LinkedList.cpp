@@ -2,7 +2,6 @@
 
 LinkedList::LinkedList() {
    head = nullptr;
-
    // TODO
 }
 
@@ -38,6 +37,12 @@ Tile* LinkedList::get(unsigned int index) {
 
         retTile = current->tile;
     }
+    return retTile;
+}
+
+Tile* LinkedList::getfront(){
+    Tile* retTile = nullptr;
+    retTile = head->tile;
     return retTile;
 }
 
@@ -100,6 +105,7 @@ void LinkedList::remove_back(){
 
 // Implement later
 void LinkedList::remove(int index) {
+    //TODO
     
 }
 

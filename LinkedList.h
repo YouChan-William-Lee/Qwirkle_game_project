@@ -16,6 +16,7 @@ public:
     unsigned int size();
 
     Tile* get(unsigned index);
+    Tile* getfront();
 
     void add_front(Tile* tile);
     void add_back(Tile* tile);

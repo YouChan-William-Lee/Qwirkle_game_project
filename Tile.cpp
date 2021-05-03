@@ -1,6 +1,8 @@
 #include "Tile.h"
 
-Tile::Tile() {
+Tile::Tile(Colour colour, Shape shape) {
+    this->colour = colour;
+    this->shape = shape;
 }
 
 Tile::Tile(Tile& other) {
@@ -9,12 +11,4 @@ Tile::Tile(Tile& other) {
 }
 
 Tile::~Tile() {
-}
-
-Colour Tile::getTile() {
-    return colour;
-}
-
-Shape Tile::getShape() {
-    return shape;
 }

@@ -6,9 +6,10 @@
 #define NUM_OF_STUDENT_INFO 3
 #define NUM_OF_COLOURS 6
 #define NUM_OF_SHAPE 6
-#define MAX_SIZE_TILE NUM_OF_COLOURS * NUM_OF_SHAPE
+#define MAX_SIZE_TILE NUM_OF_COLOURS * NUM_OF_SHAPE * 2
 
-#include "LinkedList.h"
+// #include "LinkedList.h"
+#include "TileBag.h"
 
 void welcomeMessage();
 void mainMenu();
@@ -34,6 +35,10 @@ int main(int argc, char** argv) {
         if(menu >= "1" && menu <= "4") {
             if(menu == "1") {
             // setupGame(deck, player1, player2);
+            //testing tileBag implementation
+            //remove later
+            setupGame();
+            //end of test
             } 
             else if(menu == "2") {
                 // loadupGame(deckFilename, deck, player1);
@@ -78,7 +83,11 @@ void mainMenu() {
 }
 
 void setupGame() {
-
+    //testing tileBag implementation
+    //remove later
+    TileBag* tileBag = new TileBag();
+    std::cout << tileBag->size() << std::endl;
+    //end of test
 }
 
 void loadupGame() {
