@@ -1,7 +1,19 @@
 #include "TileBag.h"
+#include "utils.h"
 
 TileBag::TileBag() {
     tileBag = new LinkedList();
+}
+
+TileBag::TileBag(TileBag& other) {
+    tileBag = new LinkedList(*other.tileBag);
+}
+
+TileBag::~TileBag() {
+    delete tileBag;
+}
+
+void TileBag::makeTiles() {
     char colours[6] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
     std::vector<Tile*> allTiles;
     for (int i = 1; i < 7; i++){
@@ -31,8 +43,12 @@ void TileBag::add(Tile* tile) {
 }
 
 Tile* TileBag::drawCard() {
-    Tile* returnTile = tileBag->getfront();
+    Tile* returnTile = new Tile(*tileBag->getfront());
     tileBag->remove_front();
     return returnTile;
+}
+
+Tile* TileBag::get(int index) {
+    return tileBag->get(index);
 }
 

@@ -13,7 +13,11 @@ class TileBag {
     public:
     
         TileBag();
+        TileBag(TileBag& other);
         ~TileBag();
+
+        //Shuffle 72 tiles
+        void makeTiles();
 
         //Returns the current size of the bag
         unsigned int size();
@@ -26,6 +30,9 @@ class TileBag {
 
         //Remove a tile from the bag
         void remove();
+
+        //Get a tile at the given index from the bag
+        Tile* get(int index);
 
         //Removes all tiles from the bag
         //Deletes the bag

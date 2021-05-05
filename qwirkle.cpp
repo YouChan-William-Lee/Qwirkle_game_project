@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cctype>
+#include <cstring>
 
 #define NUM_OF_STUDENT 4
 #define NUM_OF_STUDENT_INFO 3
@@ -10,10 +12,16 @@
 
 // #include "LinkedList.h"
 #include "TileBag.h"
+#include "Player.h"
+#include "Tile.h"
+#include "TileCodes.h"
+#include "utils.h"
 
 void welcomeMessage();
 void mainMenu();
-void setupGame();
+void setupGame(TileBag* tilebag, Player* player1, Player* player2);
+void newGame(Player* player1, Player* player2);
+void playTheGame(TileBag* tilebag, Player* player1, Player* player2);
 void loadupGame();
 void credits();
 void cleanupGame();
@@ -37,7 +45,21 @@ int main(int argc, char** argv) {
             // setupGame(deck, player1, player2);
             //testing tileBag implementation
             //remove later
-            setupGame();
+
+            // Make a new TileBag
+            TileBag* tileBag = new TileBag();
+            tileBag->makeTiles();
+
+            // Create two players
+            Player* player1 = new Player();
+            Player* player2 = new Player();
+
+            setupGame(tileBag, player1, player2);
+            //TESTED UNTIL HERE
+
+
+            playTheGame(tileBag, player1, player2);
+
             //end of test
             } 
             else if(menu == "2") {
@@ -82,12 +104,105 @@ void mainMenu() {
     std::cout << "> ";
 }
 
-void setupGame() {
-    //testing tileBag implementation
-    //remove later
-    TileBag* tileBag = new TileBag();
-    std::cout << tileBag->size() << std::endl;
-    //end of test
+void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
+    // Set players' name
+    newGame(player1, player2);
+    
+    // Create 2 new temporary TileBags
+    TileBag* initialHand1 = new TileBag();
+    TileBag* initialHand2 = new TileBag();
+
+    // Set player1 hand
+    int i = 0;
+    while (i < MAX_HAND_SIZE) {
+        initialHand1->add(tileBag->drawCard());   
+        ++i;
+    }
+    player1->setInitialHand(initialHand1);
+    delete initialHand1;
+
+    // Set player2 hand
+    i = 0;
+    while (i < MAX_HAND_SIZE) {
+        initialHand2->add(tileBag->drawCard());   
+        ++i;
+    }
+    player2->setInitialHand(initialHand2);
+    delete initialHand2;
+}
+
+void newGame(Player* player1, Player* player2) {
+    std::cout << "Starting a New Game" << std::endl;
+    std::cout << std::endl;
+    
+    bool AllUpper = true;
+    std::string name;
+    while(!std::cin.eof() && AllUpper) {
+        std::cout << "Enter a nmae for player 1 (uppercase characters only)" << std::endl;
+        std::cout << "> ";
+
+        
+        std::cin >> name;
+        for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
+            if(!isupper(name[i])) {
+                AllUpper = false;
+                std::cout << "Invalid input" << std::endl;
+            }
+        }
+        if(AllUpper) {
+            player1->setPlayerName(name);
+            AllUpper = false;
+        }
+        else {
+            AllUpper = true;
+        }
+    }
+
+    AllUpper = true;
+    while(!std::cin.eof() && AllUpper) {
+        std::cout << "Enter a nmae for player 2 (uppercase characters only)" << std::endl;
+        std::cout << "> ";
+        
+        std::cin >> name;
+        for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
+            if(!isupper(name[i])) {
+                AllUpper = false;
+                std::cout << "Invalid input" << std::endl;
+            }
+        }
+        if(AllUpper) {
+            player2->setPlayerName(name);
+            AllUpper = false;
+        }
+        else {
+            AllUpper = true;
+        }
+    }
+    
+    std::cout << "Let's Play!" << std::endl;
+}
+
+void playTheGame(TileBag* tilebag, Player* player1, Player* player2) {
+    int i = 0;
+    while(i != 1) {
+        // Need to develop from here
+        std::cout << std::endl;
+        std::cout << player1->getPlayerName() << ", it's your turn" << std::endl;
+        std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
+        std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
+        
+        // print board
+        std::cout << std::endl;
+        std::cout << "Your hand is" << std::endl;
+        printHand(player1->getHand());
+
+        std::cout << std::endl;
+        std::cout << std::endl;
+        std::cout << "Your hand is" << std::endl;
+        printHand(player2->getHand());
+        std::cout << std::endl;
+        ++i;
+    }
 }
 
 void loadupGame() {

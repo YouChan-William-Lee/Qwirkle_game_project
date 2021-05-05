@@ -10,6 +10,11 @@ LinkedList::~LinkedList() {
 }
 
 LinkedList::LinkedList(LinkedList& other) : LinkedList() {
+    head = nullptr;
+    for(unsigned int i = 0; i < other.size(); ++i){
+        Tile* tile = new Tile(*other.get(i));
+        add_back(tile);
+    }
 }
 
 unsigned int LinkedList::size() {
