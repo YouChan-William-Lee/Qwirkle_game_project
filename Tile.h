@@ -11,18 +11,16 @@ typedef int Shape;
 
 class Tile {
 
-public:
-   Colour colour;
-   Shape shape;
-   
-   Tile(Colour, Shape);
-   Tile(Tile& other);
-   ~Tile();
+   public:
+      Colour colour;
+      Shape shape;
+      
+      Tile(Colour, Shape);
+      Tile(Tile& other);
+      ~Tile();
 
-   Colour getColour();
-   Shape getShape();
-
-
+      Colour getColour();
+      Shape getShape();
 };
 
 

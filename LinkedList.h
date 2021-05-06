@@ -7,28 +7,39 @@
 #include <stdexcept>
 
 class LinkedList {
-public:
+    public:
 
-    LinkedList();
-    ~LinkedList();
-    LinkedList(LinkedList& other);
+        LinkedList();
+        ~LinkedList();
+        LinkedList(LinkedList& other);
 
-    unsigned int size();
+        // Get a size of LinkedList
+        unsigned int size();
 
-    Tile* get(unsigned index);
-    Tile* getfront();
+        // Get a Tile at given index
+        Tile* get(unsigned index);
+        Tile* getfront();
 
-    void add_front(Tile* tile);
-    void add_back(Tile* tile);
+        // Add a Tile at the front
+        void add_front(Tile* tile);
 
-    void remove_front();
-    void remove_back();
-    
-    void remove(int index);
-    void clear();
+        // Add a Tile at the back
+        void add_back(Tile* tile);
 
-private:
-    Node* head;
+        // Remove a Tile at the front
+        void remove_front();
+
+        // Remove a Tile at the back
+        void remove_back();
+        
+        // Remove A tile at given index
+        void remove(int index);
+
+        // Clear LinkedList
+        void clear();
+
+    private:
+        Node* head;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

@@ -27,7 +27,7 @@ void printColourAsString(Colour colour) {
     char green[] = "G";
     char blue[] = "B";
     char purple[] = "P";
-    char unknown[] = "U";
+    char unknown[] = " ";
 
     if (colour == RED) {
         std::cout << red;
@@ -53,7 +53,7 @@ void printShapeAsString(Shape shape) {
     char square[] = "4";
     char star_6[] = "5";
     char clover[] = "6";
-    char unknown[] = "U";
+    char unknown[] = " ";
 
     if (shape == CIRCLE) {
         std::cout << circle;

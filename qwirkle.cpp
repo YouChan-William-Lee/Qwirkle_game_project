@@ -10,12 +10,13 @@
 #define NUM_OF_SHAPE 6
 #define MAX_SIZE_TILE NUM_OF_COLOURS * NUM_OF_SHAPE * 2
 
-// #include "LinkedList.h"
+#include "LinkedList.h"
 #include "TileBag.h"
 #include "Player.h"
 #include "Tile.h"
 #include "TileCodes.h"
 #include "utils.h"
+#include "Board.h"
 
 void welcomeMessage();
 void mainMenu();
@@ -59,6 +60,8 @@ int main(int argc, char** argv) {
 
 
             playTheGame(tileBag, player1, player2);
+
+            play = false;
 
             //end of test
             } 
@@ -138,15 +141,15 @@ void newGame(Player* player1, Player* player2) {
     bool AllUpper = true;
     std::string name;
     while(!std::cin.eof() && AllUpper) {
-        std::cout << "Enter a nmae for player 1 (uppercase characters only)" << std::endl;
+        std::cout << "Enter a name for player 1 (uppercase characters only)" << std::endl;
         std::cout << "> ";
 
-        
         std::cin >> name;
         for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
             if(!isupper(name[i])) {
                 AllUpper = false;
                 std::cout << "Invalid input" << std::endl;
+                std::cout << std::endl;
             }
         }
         if(AllUpper) {
@@ -158,9 +161,11 @@ void newGame(Player* player1, Player* player2) {
         }
     }
 
+    std::cout << std::endl;
+
     AllUpper = true;
     while(!std::cin.eof() && AllUpper) {
-        std::cout << "Enter a nmae for player 2 (uppercase characters only)" << std::endl;
+        std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl;
         std::cout << "> ";
         
         std::cin >> name;
@@ -168,6 +173,7 @@ void newGame(Player* player1, Player* player2) {
             if(!isupper(name[i])) {
                 AllUpper = false;
                 std::cout << "Invalid input" << std::endl;
+                std::cout << std::endl;
             }
         }
         if(AllUpper) {
@@ -184,6 +190,8 @@ void newGame(Player* player1, Player* player2) {
 
 void playTheGame(TileBag* tilebag, Player* player1, Player* player2) {
     int i = 0;
+    Board* board = new Board();
+
     while(i != 1) {
         // Need to develop from here
         std::cout << std::endl;
@@ -191,7 +199,10 @@ void playTheGame(TileBag* tilebag, Player* player1, Player* player2) {
         std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
         std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
         
-        // print board
+        // PRINT BOARD HERE
+        std::cout << std::endl;
+        board->getBoard();
+
         std::cout << std::endl;
         std::cout << "Your hand is" << std::endl;
         printHand(player1->getHand());
@@ -205,6 +216,7 @@ void playTheGame(TileBag* tilebag, Player* player1, Player* player2) {
     }
 }
 
+//HAVEN"T IMPLEMENTED
 void loadupGame() {
 
 }
