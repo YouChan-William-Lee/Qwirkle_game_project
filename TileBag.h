@@ -23,20 +23,13 @@ class TileBag {
         unsigned int size();
 
         //Get tile from the bag
-        Tile* drawCard();
+        Tile* drawTile();
 
         //Add a tile to the bag
         void add(Tile* tile);
 
         //Remove a tile from the bag
         void remove();
-
-        //Get a tile at the given index from the bag
-        Tile* get(int index);
-
-        //Removes all tiles from the bag
-        //Deletes the bag
-        void clear();
 
     private:
         LinkedList* tileBag;

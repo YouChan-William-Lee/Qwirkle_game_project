@@ -13,10 +13,10 @@ Tile::Tile(Tile& other) {
 Tile::~Tile() {
 }
 
-Colour Tile::getColour() {
-    return colour;
-}
+// Colour Tile::getColour() {
+//     return colour;
+// }
 
-Shape Tile::getShape() {
-    return shape;
-}
+// Shape Tile::getShape() {
+//     return shape;
+// }

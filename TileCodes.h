@@ -17,4 +17,7 @@
 #define STAR_6    5
 #define CLOVER    6
 
+#define NUM_OF_SHAPES   6
+#define NUM_OF_COLOURS  6
+
 #endif // ASSIGN2_TILECODES_H

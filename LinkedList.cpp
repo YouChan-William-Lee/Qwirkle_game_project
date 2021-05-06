@@ -2,7 +2,7 @@
 
 LinkedList::LinkedList() {
    head = nullptr;
-   // TODO
+   size = 0;
 }
 
 LinkedList::~LinkedList() {
@@ -11,28 +11,21 @@ LinkedList::~LinkedList() {
 
 LinkedList::LinkedList(LinkedList& other) : LinkedList() {
     head = nullptr;
-    for(unsigned int i = 0; i < other.size(); ++i){
-        Tile* tile = new Tile(*other.get(i));
+    for(int i = 0; i < other.getsize(); ++i){
+        Tile* tile = new Tile(*other.getByIndex(i));
         add_back(tile);
     }
 }
 
-unsigned int LinkedList::size() {
-    unsigned int length = 0;
-
-    Node* current = head;
-    while(current != nullptr) {
-        ++length;
-        current = current->next;
-    }
-    return length;
+int LinkedList::getsize() {
+    return size;
 }
 
-Tile* LinkedList::get(unsigned int index) {
+Tile* LinkedList::getByIndex(int index) {
     Tile* retTile = nullptr;
 
-    if(index >= 0 && index < size()) {
-        unsigned int counter = 0;
+    if(index >= 0 && index < size) {
+        int counter = 0;
         Node* current = head;
 
         while(counter < index) {
@@ -45,6 +38,34 @@ Tile* LinkedList::get(unsigned int index) {
     return retTile;
 }
 
+Tile* LinkedList::getByTile(Tile* tile) {
+    Colour colourToRemove = tile->colour;
+    Shape shapeToRemove = tile->shape;
+    Node* temp = head;
+    if (head != nullptr) {
+        if(temp->tile->colour == colourToRemove && temp->tile->shape == shapeToRemove) {
+            return temp->tile;
+        }
+        else {
+            while (temp != nullptr && (temp->tile->colour != colourToRemove || temp->tile->shape != shapeToRemove)) {
+                temp = temp->next;
+            }
+            return temp->tile;
+            size--;
+        }
+        if (temp == nullptr) {
+            throw std::runtime_error("Element not found in list");
+            return nullptr;
+        }
+        
+    }
+    else {
+        throw std::runtime_error("Trying to delete from empty linkedlist");
+        return nullptr;
+    }
+}
+
+
 Tile* LinkedList::getfront(){
     Tile* retTile = nullptr;
     retTile = head->tile;
@@ -56,6 +77,7 @@ void LinkedList::add_front(Tile* data) {
     node->tile = data;
     node->next = head;
     head = node;
+    size++;
 }
 
 void LinkedList::add_back(Tile* data) {
@@ -73,6 +95,7 @@ void LinkedList::add_back(Tile* data) {
         }
         current->next = node;
     }
+    size++;
 }
 
 void LinkedList::remove_front(){
@@ -80,7 +103,11 @@ void LinkedList::remove_front(){
         Node * toDelete = head;
         head=head->next;
         delete toDelete->tile;
-        delete toDelete;    
+        delete toDelete;
+        size--;  
+    }
+    else {
+        throw std::runtime_error("Trying to delete from empty linkedlist");
     }
 }
 
@@ -102,16 +129,54 @@ void LinkedList::remove_back(){
             // head = nullptr;
             head = curr->next;
         }
+        size--;
     }
     else {
         throw std::runtime_error("Trying to delete from empty linkedlist");
     }
 }
 
-// Implement later
-void LinkedList::remove(int index) {
-    //TODO
-    
+void LinkedList::remove(Tile* tile) {
+    Colour colourToRemove = tile->colour;
+    Shape shapeToRemove = tile->shape;
+    Node* temp = head;
+    Node* prev = NULL;
+    if (head != nullptr) {
+        if(temp->tile->colour == colourToRemove && temp->tile->shape == shapeToRemove) {
+            head = temp->next;
+            delete temp;
+        }
+        else {
+            while (temp != nullptr && (temp->tile->colour != colourToRemove || temp->tile->shape != shapeToRemove)) {
+                prev = temp;
+                temp = temp->next;
+            }
+            prev->next = temp->next;
+            delete temp;
+            size--;
+        }
+        if (temp == nullptr) {
+            throw std::runtime_error("Element not found in list");
+        }
+        
+    }
+    else {
+        throw std::runtime_error("Trying to delete from empty linkedlist");
+    }
+}
+
+void LinkedList::print() {
+    if (head != nullptr) {
+        Node* temp = head;
+        while (temp != nullptr) {
+            printTile(temp->tile);
+            std::cout << " ";
+            temp = temp->next;
+        }
+    }
+    else {
+        throw std::runtime_error("Trying to print an empty linkedlist");
+    }
 }
 
 void LinkedList::clear() {

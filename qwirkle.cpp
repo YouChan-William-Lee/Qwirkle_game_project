@@ -35,17 +35,12 @@ int main(int argc, char** argv) {
 
     while(play) {
         mainMenu();
-
-        // LinkedList* list = new LinkedList();
-
         std::string menu = "";
         std::cin >> menu;
 
         if(menu >= "1" && menu <= "4") {
             if(menu == "1") {
             // setupGame(deck, player1, player2);
-            //testing tileBag implementation
-            //remove later
 
             // Make a new TileBag
             TileBag* tileBag = new TileBag();
@@ -110,28 +105,12 @@ void mainMenu() {
 void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
     // Set players' name
     newGame(player1, player2);
-    
-    // Create 2 new temporary TileBags
-    TileBag* initialHand1 = new TileBag();
-    TileBag* initialHand2 = new TileBag();
 
     // Set player1 hand
-    int i = 0;
-    while (i < MAX_HAND_SIZE) {
-        initialHand1->add(tileBag->drawCard());   
-        ++i;
-    }
-    player1->setInitialHand(initialHand1);
-    delete initialHand1;
+    player1->setInitialHand(tileBag);
 
-    // Set player2 hand
-    i = 0;
-    while (i < MAX_HAND_SIZE) {
-        initialHand2->add(tileBag->drawCard());   
-        ++i;
-    }
-    player2->setInitialHand(initialHand2);
-    delete initialHand2;
+    //Set player2 hand
+    player2->setInitialHand(tileBag);
 }
 
 void newGame(Player* player1, Player* player2) {
@@ -145,7 +124,7 @@ void newGame(Player* player1, Player* player2) {
         std::cout << "> ";
 
         std::cin >> name;
-        for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
+        for (long unsigned int i = 0; i < name.length() && AllUpper; ++i){
             if(!isupper(name[i])) {
                 AllUpper = false;
                 std::cout << "Invalid input" << std::endl;
@@ -169,7 +148,7 @@ void newGame(Player* player1, Player* player2) {
         std::cout << "> ";
         
         std::cin >> name;
-        for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
+        for (long unsigned int i = 0; i < name.length() && AllUpper; ++i){
             if(!isupper(name[i])) {
                 AllUpper = false;
                 std::cout << "Invalid input" << std::endl;
@@ -205,12 +184,12 @@ void playTheGame(TileBag* tilebag, Player* player1, Player* player2) {
 
         std::cout << std::endl;
         std::cout << "Your hand is" << std::endl;
-        printHand(player1->getHand());
+        player1->getHand()->displayTiles();
 
         std::cout << std::endl;
         std::cout << std::endl;
         std::cout << "Your hand is" << std::endl;
-        printHand(player2->getHand());
+        player2->getHand()->displayTiles();
         std::cout << std::endl;
         ++i;
     }

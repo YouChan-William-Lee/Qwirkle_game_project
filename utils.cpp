@@ -2,22 +2,10 @@
 #include "TileBag.h"
 #include <iostream>
 
-void printHand(TileBag* tileBag) {
-    if(tileBag->size() != 0) {
-        for (unsigned int i = 0; i < tileBag->size(); ++i) {
-            if (tileBag->get(i) != nullptr) {
-                printTile(tileBag->get(i));
-            }
-            if (i != tileBag->size() - 1) {
-                std::cout << "|";
-            }
-        }
-    } 
-}
 
 void printTile(Tile* tile) {
-    printColourAsString(tile->getColour());
-    printShapeAsString(tile->getShape());
+    printColourAsString(tile->colour);
+    printShapeAsString(tile->shape);
 }
 
 void printColourAsString(Colour colour) {

@@ -3,9 +3,8 @@
 
 #include "Tile.h"
 
-class TileBag;
+class LinkedList;
 
-void printHand(TileBag* tileBag);
 void printTile(Tile* tile);
 void printColourAsString(Colour colour);
 void printShapeAsString(Shape shape);

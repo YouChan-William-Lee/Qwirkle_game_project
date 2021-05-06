@@ -3,8 +3,10 @@
 
 #include "Node.h"
 #include "Tile.h"
+#include "utils.h"
 
 #include <stdexcept>
+#include <iostream>
 
 class LinkedList {
     public:
@@ -14,10 +16,13 @@ class LinkedList {
         LinkedList(LinkedList& other);
 
         // Get a size of LinkedList
-        unsigned int size();
+        int getsize();
 
-        // Get a Tile at given index
-        Tile* get(unsigned index);
+        // Get a specified tile
+        Tile* getByTile(Tile* tile);
+
+        //Get a tile at a specified index
+        Tile* getByIndex(int index);
         Tile* getfront();
 
         // Add a Tile at the front
@@ -32,14 +37,18 @@ class LinkedList {
         // Remove a Tile at the back
         void remove_back();
         
-        // Remove A tile at given index
-        void remove(int index);
+        // Remove a specified tile
+        void remove(Tile* tile);
 
         // Clear LinkedList
         void clear();
 
+        //Print all the elements in the linkedlist
+        void print();
+
     private:
         Node* head;
+        int size;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

@@ -19,8 +19,8 @@ class Tile {
       Tile(Tile& other);
       ~Tile();
 
-      Colour getColour();
-      Shape getShape();
+      // Colour getColour();
+      // Shape getShape();
 };
 
 
