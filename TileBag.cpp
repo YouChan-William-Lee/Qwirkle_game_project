@@ -12,10 +12,13 @@ TileBag::TileBag(TileBag& other) {
 TileBag::~TileBag() {
     tileBag->clear();
     delete tileBag;
+    tileBag = nullptr;
 }
 
 void TileBag::makeTiles() {
-    char colours[6] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
+    char colours[NUM_OF_COLOURS] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
+    char shapes[NUM_OF_SHAPES] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
+
     std::vector<Tile*> allTiles;
     for (int i = 1; i < NUM_OF_SHAPES + 1; i++){
         for (int k = 0; k < NUM_OF_COLOURS; k++){
@@ -31,8 +34,14 @@ void TileBag::makeTiles() {
     std::shuffle(std::begin(allTiles), std::end(allTiles),
                  std::default_random_engine(seed));
     for (unsigned int i = 0; i < allTiles.size(); i++){
-        tileBag->add_back(allTiles[i]);
+        tileBag->add_back(new Tile(*allTiles[i]));
     }
+
+    for (int i = 0; i < MAX_SIZE_TILE; ++i){
+        delete allTiles[i];
+        allTiles[i] = nullptr;
+    }
+    allTiles.clear();
 }
 
 unsigned int TileBag::size() {
@@ -51,3 +60,6 @@ Tile* TileBag::drawTile() {
 }
 
 
+void TileBag::clear() {
+    tileBag->clear();
+}

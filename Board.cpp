@@ -7,14 +7,26 @@
 #define INITIAL_BOARD_ROW_SIZE 6
 #define INITIAL_BOARD_COL_SIZE 6
 #define INITIAL_BOARD_ROW_ENG 'A'
-#define INITIAL_BOARD_COL_NUM '1'
+#define INITIAL_BOARD_COL_NUM 1
 
 Board::Board() {
-    Tile* tile;
-    board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE, tile = new Tile(' ', ' ')));
+    Tile* tile = new Tile();
+    board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE, tile));
+
+    for(int i = 0; i != INITIAL_BOARD_ROW_SIZE ; ++i) {
+        for (int j = 0; j != INITIAL_BOARD_COL_SIZE; ++j) {
+            board[i][j] = new Tile();
+        }
+    }
+    delete tile;
 }
 Board::Board(Board& other) {
-
+    clear();
+    for(unsigned int i = 0; i != other.board.size() ; ++i) {
+        for (unsigned int j = 0; j != other.board[i].size(); ++j) {
+            board[i][j] = new Tile(*other.board[i][j]);
+        }
+    }
 }
 Board::~Board() {
     clear();
@@ -51,8 +63,12 @@ void Board::getBoard() {
     }
 }
 
-void Board::add(Tile* tile, std::string row, int col) {
-
+void Board::add(Tile* tile, char row, unsigned int col) {
+    if(row >= INITIAL_BOARD_ROW_ENG && row < char(INITIAL_BOARD_ROW_ENG + board.size())
+                                    && col >= INITIAL_BOARD_COL_NUM
+                                    && col < (INITIAL_BOARD_COL_NUM + board[0].size())) {
+        board[row][col] = new Tile(*tile);
+    }
 }
 
 void Board::clear() {
@@ -62,5 +78,4 @@ void Board::clear() {
             board[i][j] = nullptr;
         }
     }
-    board.clear();
 }

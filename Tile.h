@@ -15,6 +15,7 @@ class Tile {
       Colour colour;
       Shape shape;
       
+      Tile();
       Tile(Colour, Shape);
       Tile(Tile& other);
       ~Tile();

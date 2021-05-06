@@ -2,6 +2,7 @@
 #define ASSIGN2_TILEBAG_H
 
 #include "LinkedList.h"
+#include "TileCodes.h"
 #include <stdexcept>
 #include <vector>
 #include <algorithm>

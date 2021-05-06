@@ -6,9 +6,6 @@
 
 #define NUM_OF_STUDENT 4
 #define NUM_OF_STUDENT_INFO 3
-#define NUM_OF_COLOURS 6
-#define NUM_OF_SHAPE 6
-#define MAX_SIZE_TILE NUM_OF_COLOURS * NUM_OF_SHAPE * 2
 
 #include "LinkedList.h"
 #include "TileBag.h"
@@ -22,7 +19,7 @@ void welcomeMessage();
 void mainMenu();
 void setupGame(TileBag* tilebag, Player* player1, Player* player2);
 void newGame(Player* player1, Player* player2);
-void playTheGame(TileBag* tilebag, Player* player1, Player* player2);
+void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
 void loadupGame();
 void credits();
 void cleanupGame();
@@ -46,6 +43,9 @@ int main(int argc, char** argv) {
             TileBag* tileBag = new TileBag();
             tileBag->makeTiles();
 
+            // Make a new Board    
+            Board* board = new Board();
+
             // Create two players
             Player* player1 = new Player();
             Player* player2 = new Player();
@@ -54,7 +54,12 @@ int main(int argc, char** argv) {
             //TESTED UNTIL HERE
 
 
-            playTheGame(tileBag, player1, player2);
+            playTheGame(tileBag, board, player1, player2);
+
+            delete tileBag;
+            delete board;
+            delete player1;
+            delete player2;
 
             play = false;
 
@@ -143,7 +148,7 @@ void newGame(Player* player1, Player* player2) {
     std::cout << std::endl;
 
     AllUpper = true;
-    while(!std::cin.eof() && AllUpper) {
+    while(AllUpper) {
         std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl;
         std::cout << "> ";
         
@@ -164,7 +169,9 @@ void newGame(Player* player1, Player* player2) {
         }
     }
     
+    std::cout << std::endl;
     std::cout << "Let's Play!" << std::endl;
+    std::cout << std::endl;
 }
 
 void playTheGame(TileBag* tilebag, Player* player1, Player* player2) {
