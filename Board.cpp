@@ -10,7 +10,15 @@
 #define INITIAL_BOARD_COL_NUM 1
 
 Board::Board() {
-    board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE, new Tile()));
+    Tile* tile = new Tile();
+    board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE, tile));
+
+    for(int i = 0; i != INITIAL_BOARD_ROW_SIZE ; ++i) {
+        for (int j = 0; j != INITIAL_BOARD_COL_SIZE; ++j) {
+            board[i][j] = new Tile();
+        }
+    }
+    delete tile;
 }
 Board::Board(Board& other) {
     clear();
@@ -64,11 +72,10 @@ void Board::add(Tile* tile, char row, unsigned int col) {
 }
 
 void Board::clear() {
-    // for(unsigned int i = 0; i != board.size() ; ++i) {
-    //     for (unsigned int j = 0; j != board[i].size(); ++j) {
-    //         delete[] board[i][j];
-    //         board[i][j] = nullptr;
-    //     }
-    // }
-    // board.clear();
+    for(unsigned int i = 0; i != board.size() ; ++i) {
+        for (unsigned int j = 0; j != board[i].size(); ++j) {
+            delete board[i][j];
+            board[i][j] = nullptr;
+        }
+    }
 }
