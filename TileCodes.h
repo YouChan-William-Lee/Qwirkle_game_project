@@ -1,6 +1,10 @@
 #ifndef ASSIGN2_TILECODES_H
 #define ASSIGN2_TILECODES_H
 
+#define NUM_OF_COLOURS 6
+#define NUM_OF_SHAPES 6
+#define MAX_SIZE_TILE NUM_OF_COLOURS * NUM_OF_SHAPES * 2
+
 // Colours
 #define RED    'R'
 #define ORANGE 'O'
