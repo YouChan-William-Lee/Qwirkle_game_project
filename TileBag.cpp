@@ -17,7 +17,6 @@ TileBag::~TileBag() {
 
 void TileBag::makeTiles() {
     char colours[NUM_OF_COLOURS] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
-    char shapes[NUM_OF_SHAPES] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
 
     std::vector<Tile*> allTiles;
     for (int i = 1; i < NUM_OF_SHAPES + 1; i++){
@@ -36,15 +35,10 @@ void TileBag::makeTiles() {
     for (unsigned int i = 0; i < allTiles.size(); i++){
         tileBag->add_back(new Tile(*allTiles[i]));
     }
-
-    for (int i = 0; i < MAX_SIZE_TILE; ++i){
-        delete allTiles[i];
-        allTiles[i] = nullptr;
-    }
     allTiles.clear();
 }
 
-unsigned int TileBag::size() {
+int TileBag::size() {
     return tileBag->getsize();
 }
 
@@ -59,7 +53,3 @@ Tile* TileBag::drawTile() {
     return returnTile;
 }
 
-
-void TileBag::clear() {
-    tileBag->clear();
-}

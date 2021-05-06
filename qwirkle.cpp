@@ -51,7 +51,6 @@ int main(int argc, char** argv) {
             Player* player2 = new Player();
 
             setupGame(tileBag, player1, player2);
-            //TESTED UNTIL HERE
 
 
             playTheGame(tileBag, board, player1, player2);
@@ -174,32 +173,26 @@ void newGame(Player* player1, Player* player2) {
     std::cout << std::endl;
 }
 
-void playTheGame(TileBag* tilebag, Player* player1, Player* player2) {
-    int i = 0;
-    Board* board = new Board();
+void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2) {
+    
+    // Need to develop from here
+    std::cout << player1->getPlayerName() << ", it's your turn" << std::endl;
+    std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
+    std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
+    
+    // PRINT BOARD HERE
+    std::cout << std::endl;
+    board->getBoard();
 
-    while(i != 1) {
-        // Need to develop from here
-        std::cout << std::endl;
-        std::cout << player1->getPlayerName() << ", it's your turn" << std::endl;
-        std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
-        std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
-        
-        // PRINT BOARD HERE
-        std::cout << std::endl;
-        board->getBoard();
+    std::cout << std::endl;
+    std::cout << "Your hand is" << std::endl;
+    player1->getHand()->displayTiles();
 
-        std::cout << std::endl;
-        std::cout << "Your hand is" << std::endl;
-        player1->getHand()->displayTiles();
-
-        std::cout << std::endl;
-        std::cout << std::endl;
-        std::cout << "Your hand is" << std::endl;
-        player2->getHand()->displayTiles();
-        std::cout << std::endl;
-        ++i;
-    }
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << "Your hand is" << std::endl;
+    player2->getHand()->displayTiles();
+    std::cout << std::endl;
 }
 
 //HAVEN"T IMPLEMENTED

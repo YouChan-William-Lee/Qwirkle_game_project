@@ -21,7 +21,7 @@ class TileBag {
         void makeTiles();
 
         //Returns the current size of the bag
-        unsigned int size();
+        int size();
 
         //Get tile from the bag
         Tile* drawTile();
