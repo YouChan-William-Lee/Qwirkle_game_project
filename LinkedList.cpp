@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include "Tile.h"
 
 LinkedList::LinkedList() {
    head = nullptr;
@@ -39,28 +40,31 @@ Tile* LinkedList::getByIndex(int index) {
 }
 
 Tile* LinkedList::getByTile(Tile* tile) {
-    Colour colourToRemove = tile->colour;
-    Shape shapeToRemove = tile->shape;
+    Colour colourToRemove = tile->getColour();
+    Shape shapeToRemove = tile->getShape();
     Node* temp = head;
+    Tile* retTile = nullptr;
     if (head != nullptr) {
-        if(temp->tile->colour == colourToRemove && temp->tile->shape == shapeToRemove) {
-            return temp->tile;
+        if(temp->tile->getColour() == colourToRemove && temp->tile->getShape() == shapeToRemove) {
+            retTile = temp->tile;
         }
         else {
-            while (temp != nullptr && (temp->tile->colour != colourToRemove || temp->tile->shape != shapeToRemove)) {
+            while (temp != nullptr && (temp->tile->getColour() != colourToRemove || temp->tile->getShape() != shapeToRemove)) {
                 temp = temp->next;
             }
-            return temp->tile;
+            retTile = temp->tile;
             size--;
         }
         if (temp == nullptr) {
-            return nullptr;
+            retTile = nullptr;
         }
         
     }
     else {
-        return nullptr;
+        retTile = nullptr;
     }
+
+    return retTile;
 }
 
 
@@ -136,17 +140,17 @@ void LinkedList::remove_back(){
 
 bool LinkedList::remove(Tile* tile) {
     bool success = true;
-    Colour colourToRemove = tile->colour;
-    Shape shapeToRemove = tile->shape;
+    Colour colourToRemove = tile->getColour();
+    Shape shapeToRemove = tile->getShape();
     Node* temp = head;
     Node* prev = NULL;
     if (head != nullptr) {
-        if(temp->tile->colour == colourToRemove && temp->tile->shape == shapeToRemove) {
+        if(temp->tile->getColour() == colourToRemove && temp->tile->getShape() == shapeToRemove) {
             head = temp->next;
             delete temp;
         }
         else {
-            while (temp != nullptr && (temp->tile->colour != colourToRemove || temp->tile->shape != shapeToRemove)) {
+            while (temp != nullptr && (temp->tile->getColour() != colourToRemove || temp->tile->getShape() != shapeToRemove)) {
                 prev = temp;
                 temp = temp->next;
             }
@@ -166,13 +170,72 @@ bool LinkedList::remove(Tile* tile) {
     return success;
 }
 
+void LinkedList::remove(int index) {
+	Node* pre = NULL;
+	Node* cur = this->head;
+	bool flag = 1;
+	while (index >= 0 && flag && cur != NULL) {
+		if (index == 0) {
+			Node* delete_node = cur;
+			if (pre == NULL) {
+				this->head = head->next;
+			}
+			else {
+				pre->next = cur->next;
+			}
+			delete delete_node;
+			flag = 0;
+		}
+		else {
+			index--;
+			pre = cur;
+			cur = cur->next;
+		}
+	}
+	return;
+}
+void LinkedList::remove_tile(std::string x) {
+	Colour c = x[0];
+	Shape s = 0;
+	for (unsigned int i = 1; i < x.length(); i++) {
+		s = s * 10 + (x[i] - '0');
+	}
+	int index = -1;
+	for (int i = 0; index == -1 && i < getsize(); i++) {
+		Tile* t = getByIndex(i);
+		if (t->getColour() == c && t->getShape() == s) {
+			index = i;
+		}
+	}
+	return remove(index);
+}
+
+Tile* LinkedList::find_tile(std::string tile) {
+	Colour c = tile[0];
+	Shape s = 0;
+	for (unsigned int i = 1; i < tile.length(); i++) {
+		s = s * 10 + (tile[i] - '0');
+	}
+	int index = -1;
+	for (int i = 0; index == -1 && i < getsize(); i++) {
+		Tile* t = new Tile(*getByIndex(i));
+		if (t->getColour() == c && t->getShape() == s) {
+			index = i;
+		}
+        delete t;
+	}
+	return getByIndex(index);
+}
+
 void LinkedList::print() {
     if (head != nullptr) {
         Node* temp = head;
         while (temp != nullptr) {
             printTile(temp->tile);
-            std::cout << " ";
             temp = temp->next;
+            if(temp != nullptr) {
+                std::cout << ",";
+            }
         }
     }
     else {

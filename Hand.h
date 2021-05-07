@@ -18,8 +18,16 @@ class Hand {
         //Remove tile from hand
         bool removeTile(Tile* tile);
 
+        //Return a tile if exists
+        Tile* getTilebyName(std::string tilename);
+
+        void removeTile(std::string tilename);
+
         //Show all tiles in hand
         void displayTiles();
+
+        //Return hand size
+        int getSize();
 
     private:
         LinkedList* hand;    

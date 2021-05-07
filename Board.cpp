@@ -63,13 +63,62 @@ void Board::getBoard() {
     }
 }
 
-void Board::add(Tile* tile, char row, long unsigned int col) {
-    if(row >= INITIAL_BOARD_ROW_ENG && row < char(INITIAL_BOARD_ROW_ENG + board.size())
-                                    && col >= INITIAL_BOARD_COL_NUM
-                                    && col < (INITIAL_BOARD_COL_NUM + board[0].size())) {
-        board[row][col]->setColour(tile->colour);
-        board[row][col]->setShape(tile->shape);
-    }
+void Board::add(std::string x, Tile* tile) {
+    unsigned int row = (int)(x[0] - 'A');
+	unsigned int col = 0;
+	for (unsigned int i = 1; i < x.length(); i++) {
+		col = col * 10 + (int)(x[i] - '0');
+	}
+
+    board[row][col]->setColour(tile->getColour());
+    board[row][col]->setShape(tile->getShape());
+}
+
+bool Board::check(std::string x, Tile* tile, bool* first) {
+    int nx[4] = { 0,0,-1,1 };
+	int ny[4] = { -1,1,0,0 };
+
+	unsigned int row = (int)(x[0] - 'A');
+	unsigned int col = 0;
+	for (unsigned int i = 1; i < x.length(); i++) {
+		col = col * 10 + (int)(x[i] - '0');
+	}
+	int deck_count = 0;
+    int neighbour = 0;
+    //Check empty tile
+	if (board[row][col]->getColour() == ' ') {
+		for (int i = 0; i < 4; i++) {
+			unsigned int neighbour_x = nx[i] + row;
+			unsigned int neighbour_y = ny[i] + col;
+			if (neighbour_x < 0 || neighbour_x >= board.size() || neighbour_y < 0 || neighbour_y >= board[0].size()) {
+				deck_count += 1;
+                neighbour += 1;
+                std::cout <<"TEST1" << std::endl;
+			}
+			else {
+                Tile* t = board[neighbour_x][neighbour_y];
+                if(!(*first)) {
+                    if (t->getColour() == ' ' || t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
+					deck_count += 1;
+                    std::cout <<"TEST2" << std::endl;
+				    }
+                }
+                else {
+                    if(neighbour < 3 && t->getColour() == ' ') {
+                        deck_count += 1;
+                        neighbour += 1;
+                        std::cout <<"TEST3" << std::endl;
+                    }
+                    else if (t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
+                        deck_count += 1;
+                        std::cout <<"TEST4" << std::endl;
+                    }                    
+                }
+			}
+		}
+        std::cout <<deck_count << std::endl;
+	}
+	return (deck_count == 4 ? true : false);
 }
 
 void Board::clear() {

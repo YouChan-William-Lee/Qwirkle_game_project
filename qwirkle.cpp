@@ -20,6 +20,7 @@ void mainMenu();
 void setupGame(TileBag* tilebag, Player* player1, Player* player2);
 void newGame(Player* player1, Player* player2);
 void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2, int currentPlayer);
+int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first);
 void loadupGame();
 void credits();
 void cleanupGame();
@@ -177,98 +178,172 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
     //variable to keep the loop running
     //current loop will run for 2 turns
     //remove when u implement win game
-    bool looptest = true;
-    while (looptest) {
-        if (currentPlayer == 1) {
-            bool actionSuccess = false;
-            std::string userAction;
-            std::string userTile;
-            std::string userLocation;
-            std::string userCoordinate;
-            std::cout << player1->getPlayerName() << ", it's your turn" << std::endl;
-            std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
-            std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
 
-            // PRINT BOARD HERE
+    // bool looptest = true;
+    // while (looptest) {
+    //     if (currentPlayer == 1) {
+    //         bool actionSuccess = false;
+    //         std::string userAction;
+    //         std::string userTile;
+    //         std::string userLocation;
+    //         std::string userCoordinate;
+    //         std::cout << player1->getPlayerName() << ", it's your turn" << std::endl;
+    //         std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
+    //         std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
+
+    //         // PRINT BOARD
+    //         std::cout << std::endl;
+    //         board->getBoard();
+
+    //         std::cout << std::endl;
+    //         std::cout << "Your hand is" << std::endl;
+    //         player1->getHand()->displayTiles();
+
+    //         while (!actionSuccess) {
+    //             std::cout << std::endl;
+    //             std::cout << "> ";
+    //             std::cin >> userAction;
+    //             std::cin >> userTile;
+    //             std::cin >> userLocation;
+    //             std::cin >> userCoordinate;
+    //             if (userAction.compare("place") == 0) {
+    //                 Tile* tileToPlace = getTileFromString(userTile);
+    //                 bool success = player1->getHand()->removeTile(tileToPlace);
+    //                 if (success && userLocation.compare("at") == 0) {
+    //                     actionSuccess = true;
+    //                     std::cout << "entered" << std::endl;
+    //                     // board->add(tileToPlace, getRowFromString(userCoordinate), 
+    //                     //             getColFromString(userCoordinate));
+    //                 } else {
+    //                     actionSuccess = false;
+    //                 }
+    //             }
+    //             if (!actionSuccess) {
+    //                 std::cout << "Invalid command. Please re-enter" << std::endl;
+    //             }
+
+    //         }
+    //         currentPlayer = 2;
+    //     }
+    //     if (currentPlayer == 2) {
+    //         bool actionSuccess = false;
+    //         std::string userAction;
+    //         std::string userTile;
+    //         std::string userLocation;
+    //         std::string userCoordinate;
+    //         std::cout << player2->getPlayerName() << ", it's your turn" << std::endl;
+    //         std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
+    //         std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
+
+    //         // PRINT BOARD HERE
+    //         std::cout << std::endl;
+    //         board->getBoard();
+
+    //         std::cout << std::endl;
+    //         std::cout << "Your hand is" << std::endl;
+    //         player2->getHand()->displayTiles();
+
+    //         while (!actionSuccess) {
+    //             std::cout << std::endl;
+    //             std::cout << ">";
+    //             std::cin >> userAction;
+    //             std::cin >> userTile;
+    //             std::cin >> userLocation;
+    //             std::cin >> userCoordinate;
+    //             if (userAction.compare("place") == 0) {
+    //                 Tile* tileToPlace = getTileFromString(userTile);
+    //                 bool success = player2->getHand()->removeTile(tileToPlace);
+    //                 if (success && userLocation.compare("at") == 0) {
+    //                     actionSuccess = true;
+    //                     std::cout << "entered" << std::endl;
+    //                     // board->add(tileToPlace, getRowFromString(userCoordinate), 
+    //                     //             getColFromString(userCoordinate));
+    //                 } else {
+    //                     actionSuccess = false;
+    //                 }
+    //             }
+    //             if (!actionSuccess) {
+    //                 std::cout << "Invalid command. Please re-enter" << std::endl;
+    //             }
+
+    //         }
+    //         currentPlayer = 2;
+    //         looptest = false;
+    //     }
+    // }
+
+	int turn = 0;
+    bool value = false;
+    bool* first = &value;
+	while (!std::cin.eof() && tilebag->size() != 0 && player1->getHand()->getSize() != 0 && player2->getHand()->getSize() != 0) {
+
+		board->getBoard();
+		if (turn == 0) {
+			turn += player_turn(board, tilebag, player1, player2, first);
+		}
+		else {
+			turn += player_turn(board, tilebag, player2, player1, first);
+		}
+		turn %= 2;
+	}
+}
+
+int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first) {
+    int flag = 0;
+    std::cout << std::endl;
+	std::cout << p_turn->getPlayerName() << ", it's your turn" << std::endl;
+    std::cout << "Score for " << p_turn->getPlayerName() << ": " << p_turn->getPlayerScore() << std::endl;;
+	std::cout << "Score for " << p_wait->getPlayerName() << ": " << p_wait->getPlayerScore() << std::endl;;
+    p_turn->getHand()->displayTiles();
+
+	std::string command, tile, at, location;
+    std::cout << std::endl;
+	std::cout << "> ";
+	std::cin >> command >> tile;
+	if (command == "replace") {
+		Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
+        if (t != nullptr) {
+            TileBag->add(t);
+            p_turn->getHand()->removeTile(t);
+            p_turn->getHand()->addTile(TileBag->drawTile());
             std::cout << std::endl;
-            board->getBoard();
-
-            std::cout << std::endl;
-            std::cout << "Your hand is" << std::endl;
-            player1->getHand()->displayTiles();
-
-            while (!actionSuccess) {
-                std::cout << std::endl;
-                std::cout << ">";
-                std::cin >> userAction;
-                std::cin >> userTile;
-                std::cin >> userLocation;
-                std::cin >> userCoordinate;
-                if (userAction.compare("place") == 0) {
-                    Tile* tileToPlace = getTileFromString(userTile);
-                    bool success = player1->getHand()->removeTile(tileToPlace);
-                    if (success && userLocation.compare("at") == 0) {
-                        actionSuccess = true;
-                        std::cout << "entered" << std::endl;
-                        // board->add(tileToPlace, getRowFromString(userCoordinate), 
-                        //             getColFromString(userCoordinate));
-                    } else {
-                        actionSuccess = false;
-                    }
-                }
-                if (!actionSuccess) {
-                    std::cout << "Invalid command. Please re-enter" << std::endl;
-                }
-
-            }
-            currentPlayer = 2;
         }
-        if (currentPlayer == 2) {
-            bool actionSuccess = false;
-            std::string userAction;
-            std::string userTile;
-            std::string userLocation;
-            std::string userCoordinate;
-            std::cout << player2->getPlayerName() << ", it's your turn" << std::endl;
-            std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
-            std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
-
-            // PRINT BOARD HERE
-            std::cout << std::endl;
-            board->getBoard();
-
-            std::cout << std::endl;
-            std::cout << "Your hand is" << std::endl;
-            player2->getHand()->displayTiles();
-
-            while (!actionSuccess) {
-                std::cout << std::endl;
-                std::cout << ">";
-                std::cin >> userAction;
-                std::cin >> userTile;
-                std::cin >> userLocation;
-                std::cin >> userCoordinate;
-                if (userAction.compare("place") == 0) {
-                    Tile* tileToPlace = getTileFromString(userTile);
-                    bool success = player2->getHand()->removeTile(tileToPlace);
-                    if (success && userLocation.compare("at") == 0) {
-                        actionSuccess = true;
-                        std::cout << "entered" << std::endl;
-                        // board->add(tileToPlace, getRowFromString(userCoordinate), 
-                        //             getColFromString(userCoordinate));
-                    } else {
-                        actionSuccess = false;
-                    }
-                }
-                if (!actionSuccess) {
-                    std::cout << "Invalid command. Please re-enter" << std::endl;
-                }
-
-            }
-            currentPlayer = 2;
-            looptest = false;
+        else {
+            std::cout << "Ivalid input" << std::endl;
         }
-    }
+	}
+	else if (command == "place") {
+		std::cin >> at >> location;
+		Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
+		if (t != nullptr) {
+			if (board->check(location, t, first)) {
+				board->add(location, t);
+				p_turn->getHand()->removeTile(tile);
+                p_turn->getHand()->addTile(TileBag->drawTile());
+                std::cout << std::endl;
+                // check if first tile exists on the board
+                if (*first == false) {
+                    *first = true;
+                }
+                // Couldn't implement score yet
+				//score += board->getScore(loc);
+				flag = 1;
+			}
+			else {
+				std::cout << "Cannot put the tile at " << location << std::endl;
+                std::cout << std::endl;
+			}
+		}
+		else {
+			std::cout << "Please enter correct Tile" << std::endl;
+            std::cout << std::endl;
+		}
+	}
+	else {
+		std::cout << "Please enter a correct command " << std::endl;
+        std::cout << std::endl;
+	}
+	return flag;
 }
 
 //HAVEN"T IMPLEMENTED

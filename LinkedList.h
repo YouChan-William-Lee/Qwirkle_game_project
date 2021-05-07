@@ -25,6 +25,9 @@ class LinkedList {
         Tile* getByIndex(int index);
         Tile* getfront();
 
+        //Find a tile by string tile name
+        Tile* find_tile(std::string tile);
+
         // Add a Tile at the front
         void add_front(Tile* tile);
 
@@ -36,6 +39,10 @@ class LinkedList {
 
         // Remove a Tile at the back
         void remove_back();
+
+        void remove(int index);
+
+        void remove_tile(std::string x);
         
         // Remove a specified tile
         bool remove(Tile* tile);
