@@ -63,11 +63,12 @@ void Board::getBoard() {
     }
 }
 
-void Board::add(Tile* tile, char row, unsigned int col) {
+void Board::add(Tile* tile, char row, long unsigned int col) {
     if(row >= INITIAL_BOARD_ROW_ENG && row < char(INITIAL_BOARD_ROW_ENG + board.size())
                                     && col >= INITIAL_BOARD_COL_NUM
                                     && col < (INITIAL_BOARD_COL_NUM + board[0].size())) {
-        board[row][col] = new Tile(*tile);
+        board[row][col]->setColour(tile->colour);
+        board[row][col]->setShape(tile->shape);
     }
 }
 

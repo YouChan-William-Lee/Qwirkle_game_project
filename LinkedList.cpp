@@ -54,13 +54,11 @@ Tile* LinkedList::getByTile(Tile* tile) {
             size--;
         }
         if (temp == nullptr) {
-            throw std::runtime_error("Element not found in list");
             return nullptr;
         }
         
     }
     else {
-        throw std::runtime_error("Trying to delete from empty linkedlist");
         return nullptr;
     }
 }
@@ -132,11 +130,12 @@ void LinkedList::remove_back(){
         size--;
     }
     else {
-        throw std::runtime_error("Trying to delete from empty linkedlist");
+        std::cout << "Trying to delete from empty linkedlist" << std::endl;
     }
 }
 
-void LinkedList::remove(Tile* tile) {
+bool LinkedList::remove(Tile* tile) {
+    bool success = true;
     Colour colourToRemove = tile->colour;
     Shape shapeToRemove = tile->shape;
     Node* temp = head;
@@ -151,18 +150,20 @@ void LinkedList::remove(Tile* tile) {
                 prev = temp;
                 temp = temp->next;
             }
+        }
+        if (temp == nullptr) {
+            success = false;
+        } else {
             prev->next = temp->next;
             delete temp;
             size--;
         }
-        if (temp == nullptr) {
-            throw std::runtime_error("Element not found in list");
-        }
         
     }
     else {
-        throw std::runtime_error("Trying to delete from empty linkedlist");
+        success = false;
     }
+    return success;
 }
 
 void LinkedList::print() {
@@ -175,7 +176,7 @@ void LinkedList::print() {
         }
     }
     else {
-        throw std::runtime_error("Trying to print an empty linkedlist");
+        std::cout << "Trying to print an empty linkedlist" << std::endl;
     }
 }
 

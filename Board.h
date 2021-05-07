@@ -15,7 +15,7 @@ class Board {
         void getBoard();
 
         //Add a tile to the bag
-        void add(Tile* tile, char row, unsigned int col);
+        void add(Tile* tile, char row, long unsigned int col);
 
         //Removes all tiles from the bag
         //Deletes the bag

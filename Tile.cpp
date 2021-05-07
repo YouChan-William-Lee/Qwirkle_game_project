@@ -2,7 +2,7 @@
 
 Tile::Tile() {
     this->colour = ' ';
-    this->shape = ' ';
+    this->shape = 0;
 }
 
 Tile::Tile(Colour colour, Shape shape) {
@@ -16,4 +16,12 @@ Tile::Tile(Tile& other) {
 }
 
 Tile::~Tile() {
+}
+
+void Tile::setColour(Colour colour) {
+    this->colour = colour;
+}
+
+void Tile::setShape(Shape shape) {
+    this->shape = shape;
 }

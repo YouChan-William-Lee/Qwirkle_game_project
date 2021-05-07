@@ -16,7 +16,7 @@ class Hand {
         void addTile(Tile* tile);
 
         //Remove tile from hand
-        void removeTile(Tile* tile);
+        bool removeTile(Tile* tile);
 
         //Show all tiles in hand
         void displayTiles();

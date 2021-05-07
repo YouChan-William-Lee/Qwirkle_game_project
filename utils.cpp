@@ -59,3 +59,21 @@ void printShapeAsString(Shape shape) {
         std::cout << unknown;
     }
 }
+
+Tile* getTileFromString(std::string string) {
+    char colour = string[0];
+    int shape = string[1] - '0';
+    Tile* returnTile = new Tile(colour, shape);
+    return returnTile;
+}
+
+char getRowFromString(std::string string) {
+    char row = string[0];
+    return row;
+}
+
+long unsigned int getColFromString(std::string string) {
+    long unsigned int col = string[1] - '0';
+    return col;
+}
+

@@ -38,7 +38,7 @@ class LinkedList {
         void remove_back();
         
         // Remove a specified tile
-        void remove(Tile* tile);
+        bool remove(Tile* tile);
 
         // Clear LinkedList
         void clear();

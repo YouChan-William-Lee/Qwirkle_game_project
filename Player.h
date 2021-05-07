@@ -43,11 +43,6 @@ class Player {
          */
         Hand* getHand();
 
-        /**
-         * Returns the tile at the given index in the players hand
-         */
-        Tile* getATile(Tile* tile);
-
     private:
         std::string playerName;
         int score;

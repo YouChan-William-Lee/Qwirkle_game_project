@@ -19,6 +19,9 @@ class Tile {
       Tile(Colour, Shape);
       Tile(Tile& other);
       ~Tile();
+
+      void setColour(Colour colour);
+      void setShape(Shape shape);
 };
 
 

@@ -39,12 +39,3 @@ int Player::getPlayerScore() {
 Hand* Player::getHand() {
     return hand;
 }
-
-Tile* Player::getATile(Tile* tile) {
-    Tile* returnTile = nullptr;
-    tile = hand->getTile(tile);
-    if (tile == nullptr) {
-        std::cout << "Tile not in hand" << std::endl;
-    }
-    return returnTile;
-}

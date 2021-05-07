@@ -22,8 +22,12 @@ void Hand::addTile(Tile* tile) {
     hand->add_back(tile);
 }
 
-void Hand::removeTile(Tile* tile) {
-    hand->remove(tile);
+bool Hand::removeTile(Tile* tile) {
+    bool success = hand->remove(tile);
+    if (success == false) {
+        std::cout << "Tile not in hand" << std::endl;
+    }
+    return success;
 }
 
 void Hand::displayTiles() {
