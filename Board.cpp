@@ -10,6 +10,11 @@
 #define INITIAL_BOARD_COL_SIZE 6
 #define INITIAL_BOARD_ROW_ENG 'A'
 #define INITIAL_BOARD_COL_NUM 1
+#define ALPHABET_A 65
+#define CHAR_TO_INT 48
+#define MAXIMUM_VECTOR_SIZE 26
+#define ALL_CONDITONS 4
+#define NEIGHBOURS 4
 
 Board::Board() {
     board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE));
@@ -105,9 +110,20 @@ void Board::add(std::string x, Tile* tile) {
     board[row][col]->setShape(tile->getShape());
 }
 
+void Board::setTiles(std::string tiles) {
+    std::string str1(1, tiles[0]);
+    Colour colour = changeStringToColour(str1);
+    std::string str2(1, tiles[1]);
+    Shape shape = changeStringToShape(str2);
+    int row = int(tiles[3]) - ALPHABET_A;
+    int col = int(tiles[4]) - CHAR_TO_INT;
+    board[row][col]->setColour(colour);
+    board[row][col]->setShape(shape);
+}
+
 bool Board::check(std::string x, Tile* tile, bool* first) {
-    int nx[4] = { 0,0,-1,1 };
-	int ny[4] = { -1,1,0,0 };
+    int nx[NEIGHBOURS] = { 0,0,-1,1 };
+	int ny[NEIGHBOURS] = { -1,1,0,0 };
 
 	unsigned int row = (int)(x[0] - 'A');
 	unsigned int col = 0;
@@ -118,7 +134,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
     int neighbour = 0;
     //Check empty tile
 	if (board[row][col]->getColour() == EMPTY_TILE) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < NEIGHBOURS; i++) {
 			unsigned int neighbour_x = nx[i] + row;
 			unsigned int neighbour_y = ny[i] + col;
 			if (neighbour_x < 0 || neighbour_x >= board.size() || neighbour_y < 0 || neighbour_y >= board[0].size()) {
@@ -145,38 +161,38 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 		}
 	}
 
-    if (deck_count == 4) {
+    if (deck_count == ALL_CONDITONS) {
         unsigned int resizedRow = 0;
         unsigned int resizedCol = 0;
         if (row == board.size() - 1 && col == board[0].size() - 1) {
             resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
             resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
-            if(resizedRow > 26) {
-                resizedRow = 26;
+            if(resizedRow > MAXIMUM_VECTOR_SIZE) {
+                resizedRow = MAXIMUM_VECTOR_SIZE;
             }
-            if(resizedCol > 26) {
-                resizedCol = 26;
+            if(resizedCol > MAXIMUM_VECTOR_SIZE) {
+                resizedCol = MAXIMUM_VECTOR_SIZE;
             }
             reSize(resizedRow, resizedCol);
         }
         else if(row == board.size() - 1) {
             resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
             resizedCol = board[0].size();
-            if(resizedRow > 26) {
-                resizedRow = 26;
+            if(resizedRow > MAXIMUM_VECTOR_SIZE) {
+                resizedRow = MAXIMUM_VECTOR_SIZE;
             }
             reSize(resizedRow, resizedCol);
         }
         else if(col == board[0].size() - 1) {
             resizedRow = board.size();
             resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
-            if(resizedCol > 26) {
-                resizedCol = 26;
+            if(resizedCol > MAXIMUM_VECTOR_SIZE) {
+                resizedCol = MAXIMUM_VECTOR_SIZE;
             }
             reSize(resizedRow, resizedCol);
         }
     }
-	return (deck_count == 4 ? true : false);
+	return (deck_count == ALL_CONDITONS ? true : false);
 }
 
 unsigned int Board::getBoardRow() {
@@ -256,8 +272,10 @@ int Board::getScore(std::string tile) {
 		}
 	}
 
+    bool qwirkle = false;
     if(num_of_top + num_of_bot == 5) {
         my_score += 12;
+        qwirkle = true;
     }
     else if(num_of_top != 0 || num_of_bot != 0) {
         my_score += num_of_top + num_of_bot + 1;
@@ -265,9 +283,16 @@ int Board::getScore(std::string tile) {
 
     if(num_of_left + num_of_right == 5) {
         my_score += 12;
+        qwirkle = true;
     }
     else if(num_of_left != 0 || num_of_right != 0) {
         my_score += num_of_left + num_of_right + 1;
+    }
+
+    if(qwirkle) {
+        std::cout << std::endl;
+        std::cout << "QWIRKLE!!!" << std::endl;
+        std::cout << std::endl;
     }
 
 	return my_score;

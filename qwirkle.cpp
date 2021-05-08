@@ -3,6 +3,7 @@
 #include <string>
 #include <cctype>
 #include <cstring>
+#include <sstream>
 
 #define NUM_OF_STUDENT 4
 #define NUM_OF_STUDENT_INFO 3
@@ -82,6 +83,15 @@ int main(int argc, char** argv) {
                 Player* player2 = new Player();
 
                 loadupGame(tileBag, board, player1, player2);
+
+                playTheGame(tileBag, board, player1, player2);
+
+                delete tileBag;
+                delete board;
+                delete player1;
+                delete player2;
+
+                play = false;
             } 
             else if(menu == "3") {
                 credits();
@@ -220,6 +230,22 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
 		}
 		turn %= 2;
 	}
+
+    std::cout << "Game over" << std::endl;
+    std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
+    std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
+    if(player1->getPlayerScore() > player2->getPlayerScore()) {
+        std::cout << player1->getPlayerName() << " won!" << std::endl;
+    }
+    else if(player1->getPlayerScore() < player2->getPlayerScore()) {
+        std::cout << player2->getPlayerName() << " won!" << std::endl;
+    }
+    else {
+        std::cout << "Draw!" << std::endl;
+    }
+    std::cout << std::endl;
+    std::cout << "Goodbye" << std::endl;
+
 }
 
 int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first) {
@@ -276,7 +302,8 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
         delete t;
 	}
 	else if (command == "save") {
-        tile = tile + "txt";
+        //Save a game
+        tile = tile + ".txt";
 		std::ofstream saveFile(tile);
         saveFile << p_turn->getPlayerName() << std::endl;
         saveFile << p_turn->getPlayerScore() << std::endl;
@@ -317,10 +344,95 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
         std::cout << "Invalid input" << std::endl;
     }
     else {
-        // int numRead = 0;
-        // while(!file.eof() && numRead < LOAD_FILE_LINES) {
-        //     readPlayer(file);
-        // }
+        //Read player1 name
+        std::string player1name = "";
+        std::getline(file, player1name);
+        player1->setPlayerName(player1name);
+
+        //Read player1 score
+        std::string player1score = "";
+        std::getline(file, player1score);
+        player1->addScore(std::stoi(player1score));
+
+        //Read player1 hand
+        std::string player1hand = "";
+        std::getline(file, player1hand);
+        std::stringstream ss1(player1hand);
+        TileBag* initialHand1 = new TileBag();
+        
+        while (ss1.good()) {
+            std::string substr;
+            getline(ss1, substr, ',');
+            initialHand1->addTileByName(substr);
+        }
+        player1->setInitialHand(initialHand1);
+        delete initialHand1;
+
+        //Read player2 name
+        std::string player2name = "";
+        std::getline(file, player2name);
+        player2->setPlayerName(player2name);
+
+        //Read player2 score
+        std::string player2score = "";
+        std::getline(file, player2score);
+        player2->addScore(std::stoi(player2score));
+
+        //Read player2 hand
+        std::string player2hand = "";
+        std::getline(file, player2hand);
+        std::stringstream ss2(player2hand);
+        TileBag* initialHand2 = new TileBag();
+        
+        while (ss2.good()) {
+            std::string substr;
+            getline(ss2, substr, ',');
+            initialHand2->addTileByName(substr);
+        }
+        player2->setInitialHand(initialHand2);
+        delete initialHand2;
+
+        //Read board size
+        std::string boardsize;
+        std::getline(file, boardsize);
+        std::stringstream ss3(boardsize);  
+        int boardRowCol[2] = {};      
+        int i = 0;
+        while (ss3.good()) {
+            std::string substr;
+            getline(ss3, substr, ',');
+            boardRowCol[i] = std::stoi(substr);
+            ++i;
+        }
+
+        board->reSize(boardRowCol[0], boardRowCol[1]);
+
+        //Read tiles in board
+        std::string tilesInBoard;
+        std::getline(file, tilesInBoard);
+        remove(tilesInBoard.begin(), tilesInBoard.end(), ' ');
+        std::stringstream ss4(tilesInBoard);  
+        while (ss4.good()) {
+            std::string substr;
+            getline(ss4, substr, ',');
+            board->setTiles(substr);
+        }
+
+        //Read tileBag
+        std::string tilebagString = "";
+        std::getline(file, tilebagString);
+        std::stringstream ss5(tilebagString);
+        while (ss5.good()) {
+            std::string substr;
+            getline(ss5, substr, ',');
+            tilebag->addTileByName(substr);
+        }
+
+        //Read player turn
+        //We already know the player who saved this files is the player1 and this is player1's turn
+        std::cout << std::endl;
+        std::cout << "Qwirkle game successfully loaded" << std::endl;
+        std::cout << std::endl;
     }
 }
 

@@ -1,5 +1,4 @@
 #include "TileBag.h"
-#include "utils.h"
 
 TileBag::TileBag() {
     tileBag = new LinkedList();
@@ -53,6 +52,16 @@ unsigned int TileBag::size() {
 
 void TileBag::add(Tile* tile) {
     tileBag->add_back(tile);
+}
+
+void TileBag::addTileByName(std::string tile) {
+    std::string str1(1, tile[0]);
+    Colour colour = changeStringToColour(str1);
+    std::string str2(1, tile[1]);
+    Shape shape = changeStringToShape(str2);
+    Tile* newtile = new Tile(colour, shape);
+    tileBag->add_back(new Tile(*newtile));
+    delete newtile;
 }
 
 Tile* TileBag::drawTile() {

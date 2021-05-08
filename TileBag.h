@@ -3,12 +3,15 @@
 
 #include "LinkedList.h"
 #include "TileCodes.h"
+#include "utils.h"
+
 #include <stdexcept>
 #include <vector>
 #include <algorithm>
 #include <random>
 #include <chrono>
 #include <iostream>
+#include <string>
 
 class TileBag {
     public:
@@ -28,6 +31,8 @@ class TileBag {
 
         //Add a tile to the bag
         void add(Tile* tile);
+
+        void addTileByName(std::string tile);
 
         //Remove a tile from the bag
         void remove();

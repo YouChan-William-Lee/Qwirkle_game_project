@@ -1,4 +1,6 @@
 #include "utils.h"
+#include "TileBag.h"
+
 #include <iostream>
 
 void printHand(std::ostream& file, TileBag* tileBag) {
@@ -25,16 +27,6 @@ void printTileBag(std::ostream& file, TileBag* tileBag) {
             }
         }
     } 
-}
-
-void printBoardState(std::ostream& file, Board* board, unsigned int boardRow, unsigned int boardCol) {
-    // for(unsigned int i = 0; i != boardRow; ++i) {
-    //     for(unsigned int j = 0; j != boardCol; ++j) {
-    //         if(board[i][j]->getShape() != EMPTY_TILE) {
-    //             file << board[i][j]->getColour() << board[i][j]->getShape() << "@" << char(i+int('A')) << j;
-    //         }
-    //     }
-    // }
 }
 
 void printTile(std::ostream& output, Tile* tile) {
@@ -92,4 +84,58 @@ void printShapeAsString(std::ostream& output, Shape shape) {
     } else {
         output << unknown;
     }
+}
+
+Colour changeStringToColour(std::string c) {
+    char red[] = "R";
+    char orange[] = "O";
+    char yellow[] = "Y";
+    char green[] = "G";
+    char blue[] = "B";
+    char purple[] = "P";
+
+    Colour colour = ' ';
+
+    if (c == red) {
+        colour = RED;
+    } else if (c == orange) {
+        colour = ORANGE;
+    } else if (c == yellow) {
+        colour = YELLOW;
+    } else if (c == green) {
+        colour = GREEN;
+    } else if (c == blue) {
+        colour = BLUE;
+    } else if (c == purple) {
+        colour = PURPLE;
+    }
+
+    return colour;
+}
+
+Shape changeStringToShape(std::string s) {
+    char circle[] = "1";
+    char star_4[] = "2";
+    char diamond[] = "3";
+    char square[] = "4";
+    char star_6[] = "5";
+    char clover[] = "6";
+
+    Shape shape = ' ';
+
+    if (s == circle) {
+        shape = CIRCLE;
+    } else if (s == star_4) {
+        shape = STAR_4;
+    } else if (s == diamond) {
+        shape = DIAMOND;
+    } else if (s == square) {
+        shape = SQUARE;
+    } else if (s == star_6) {
+        shape = STAR_6;
+    } else if (s == clover) {
+        shape = CLOVER;
+    }
+
+    return shape;
 }

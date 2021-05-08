@@ -28,6 +28,8 @@ class Board {
 
         std::string returnAllTilesinBoard(std::ostream& file);
 
+        void setTiles(std::string tiles);
+
         unsigned int getBoardRow();
 
         unsigned int getBoardCol();
