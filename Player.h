@@ -48,6 +48,8 @@ class Player {
          */
         Tile* getATile(unsigned int index);
 
+        void addScore(int addScore);
+
     private:
         std::string playerName;
         int score;

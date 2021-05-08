@@ -1,8 +1,8 @@
 #include "Tile.h"
 
 Tile::Tile() {
-    this->colour = ' ';
-    this->shape = ' ';
+    this->colour = EMPTY_TILE;
+    this->shape = EMPTY_TILE;
 }
 
 Tile::Tile(Colour colour, Shape shape) {

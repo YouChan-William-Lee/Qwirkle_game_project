@@ -21,6 +21,8 @@ class Board {
 
         void reSize(unsigned int row, unsigned int col);
 
+        int getScore(std::string tile);
+
         //Removes all tiles from the bag
         //Deletes the bag
         void clear();

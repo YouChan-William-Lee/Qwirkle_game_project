@@ -40,6 +40,10 @@ TileBag* Player::getHand() {
     return hand;
 }
 
+void Player::addScore(int addScore) {
+    this->score = this->score + addScore;
+}
+
 Tile* Player::getATile(unsigned int index) {
     Tile* tile = nullptr;
     if(index <= hand->size()) {

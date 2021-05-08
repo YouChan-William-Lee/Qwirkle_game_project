@@ -245,6 +245,8 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 				board->add(location, t);
 				p_turn->getHand()->removeTile(tile);
                 p_turn->getHand()->addTile(TileBag->drawTile());
+                std::cout << "myscore: " << board->getScore(location) << std::endl;
+                p_turn->addScore(board->getScore(location));
                 std::cout << std::endl;
                 // check if first tile exists on the board
                 if (*first == false) {

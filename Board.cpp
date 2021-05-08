@@ -3,6 +3,7 @@
 
 #include "Board.h"
 #include "utils.h"
+#include "TileCodes.h"
 
 #define INITIAL_BOARD_ROW_SIZE 6
 #define INITIAL_BOARD_COL_SIZE 6
@@ -84,7 +85,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 	int deck_count = 0;
     int neighbour = 0;
     //Check empty tile
-	if (board[row][col]->getColour() == ' ') {
+	if (board[row][col]->getColour() == EMPTY_TILE) {
 		for (int i = 0; i < 4; i++) {
 			unsigned int neighbour_x = nx[i] + row;
 			unsigned int neighbour_y = ny[i] + col;
@@ -95,7 +96,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 			else {
                 Tile* t = board[neighbour_x][neighbour_y];
                 if(!(*first)) {
-                    if (t->getColour() == ' ' || t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
+                    if (t->getColour() == EMPTY_TILE || t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
 					deck_count += 1;
 				    }
                 }
@@ -160,6 +161,79 @@ void Board::reSize(unsigned int row, unsigned int col) {
             }
         }
     }
+}
+
+int Board::getScore(std::string tile) {
+    int row = (int)(tile[0] - 'A');
+	int col = 0;
+	for (unsigned int i = 1; i < tile.length(); ++i) {
+		col = col * 10 + (int)(tile[i] - '0');
+	}
+	int my_score = 0;
+
+    //Check all tiles there are near by me
+	int num_of_top = 0;
+	for (int i = row - 1; i > -1; --i) { //Check up
+		Tile* t = board[i][col];
+		if (t->getShape() == EMPTY_TILE) {
+			i = -1; //Stop
+		}
+		else {
+			num_of_top += 1;
+		}
+	}
+
+	int num_of_bot = 0;
+	for (unsigned int i = row + 1; i < board.size(); ++i) { //Check bot
+		Tile* t = board[i][col];
+		if (t->getShape() == EMPTY_TILE) {
+			i = board.size(); //Stop
+		}
+		else {
+			num_of_bot += 1;
+		}
+	}
+
+	int num_of_left = 0;
+	for (int i = col -1 ; i > -1; --i) { //Check left
+		Tile* t = board[row][i];
+		if (t->getShape() == EMPTY_TILE) {
+			i = -1; //Stop
+		}
+		else {
+			num_of_left += 1;
+		}
+	}
+
+	int num_of_right = 0;
+	for (unsigned int i = col + 1; i < board[0].size(); ++i) { //Check right
+		Tile* t = board[row][i];
+		if (t->getShape() == EMPTY_TILE) {
+			i = board[0].size(); //Stop
+		}
+		else {
+			num_of_right += 1;
+		}
+	}
+
+    std::cout << "up bot left right: "<<num_of_top << num_of_bot << num_of_left << num_of_right << std::endl;
+
+    if(num_of_top + num_of_bot == 5) {
+        my_score += 12;
+    }
+    else if(num_of_top != 0 || num_of_bot != 0) {
+        my_score += num_of_top + num_of_bot + 1;
+    }
+
+    if(num_of_left + num_of_right == 5) {
+        my_score += 12;
+    }
+    else if(num_of_left != 0 || num_of_right != 0) {
+        my_score += num_of_left + num_of_right + 1;
+    }
+
+    std::cout << " my score: " << my_score << std::endl;
+	return my_score;
 }
 
 void Board::clear() {
