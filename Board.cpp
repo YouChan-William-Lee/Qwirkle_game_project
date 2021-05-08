@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <string>
 
 #include "Board.h"
 #include "utils.h"
@@ -31,6 +32,37 @@ Board::~Board() {
     clear();
 }
 
+std::string Board::getBoardSize() {
+    return std::to_string(board.size()) + "," + std::to_string(board[0].size());
+}
+
+std::string Board::returnAllTilesinBoard(std::ostream& file) {
+    std::string retValue = "";
+    bool first = true;
+    for(unsigned int i = 0; i != board.size(); ++i) {
+        for(unsigned int j = 0; j != board[0].size(); ++j) {
+            if(board[i][j]->getShape() != EMPTY_TILE) {
+                if(first) {
+                    printTile(file, board[i][j]);
+                    file << "@";  
+                    file << char(i+int('A'));
+                    file << std::to_string(j);
+                    first = false;
+                }
+                else {
+                    file << ", ";
+                    printTile(file, board[i][j]);
+                    file << "@";  
+                    file << char(i+int('A'));
+                    file << std::to_string(j);
+                }
+                
+            }
+        }
+    }
+    return retValue;
+}
+
 void Board::getBoard() {
     for(unsigned int i = 0; i != board.size() ; ++i) {
         if(i == 0) {
@@ -53,7 +85,7 @@ void Board::getBoard() {
             if(j != board[i].size()) {
                 std::cout << "|";
             }
-            printTile(board[i][j]);
+            printTile(std::cout, board[i][j]);
             if(j == board[i].size() - 1) {
                 std::cout << "|";
             }
@@ -147,6 +179,14 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 	return (deck_count == 4 ? true : false);
 }
 
+unsigned int Board::getBoardRow() {
+    return board.size();
+}
+
+unsigned int Board::getBoardCol() {
+    return board[0].size();
+}
+
 void Board::reSize(unsigned int row, unsigned int col) {
     board.resize(row);
 
@@ -216,8 +256,6 @@ int Board::getScore(std::string tile) {
 		}
 	}
 
-    std::cout << "up bot left right: "<<num_of_top << num_of_bot << num_of_left << num_of_right << std::endl;
-
     if(num_of_top + num_of_bot == 5) {
         my_score += 12;
     }
@@ -232,7 +270,6 @@ int Board::getScore(std::string tile) {
         my_score += num_of_left + num_of_right + 1;
     }
 
-    std::cout << " my score: " << my_score << std::endl;
 	return my_score;
 }
 

@@ -2,6 +2,7 @@
 #define ASSIGN2_BOARD_H
 
 #include <vector>
+#include <string>
 #include "Tile.h"
 
 class Board {
@@ -21,7 +22,15 @@ class Board {
 
         void reSize(unsigned int row, unsigned int col);
 
+        std::string getBoardSize();
+
         int getScore(std::string tile);
+
+        std::string returnAllTilesinBoard(std::ostream& file);
+
+        unsigned int getBoardRow();
+
+        unsigned int getBoardCol();
 
         //Removes all tiles from the bag
         //Deletes the bag

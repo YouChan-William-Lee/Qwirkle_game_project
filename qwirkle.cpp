@@ -6,6 +6,7 @@
 
 #define NUM_OF_STUDENT 4
 #define NUM_OF_STUDENT_INFO 3
+#define LOAD_FILE_LINES 10
 
 #include "LinkedList.h"
 #include "TileBag.h"
@@ -21,7 +22,7 @@ void setupGame(TileBag* tilebag, Player* player1, Player* player2);
 void newGame(Player* player1, Player* player2);
 void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
 int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first);
-void loadupGame();
+void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
 void credits();
 void cleanupGame();
 
@@ -31,7 +32,7 @@ int main(int argc, char** argv) {
     
     bool play = true;
 
-    while(play) {
+    while(!std::cin.eof() && play) {
         mainMenu();
 
         // LinkedList* list = new LinkedList();
@@ -41,38 +42,46 @@ int main(int argc, char** argv) {
 
         if(menu >= "1" && menu <= "4") {
             if(menu == "1") {
-            // setupGame(deck, player1, player2);
-            //testing tileBag implementation
-            //remove later
+                // setupGame(deck, player1, player2);
+                //testing tileBag implementation
+                //remove later
 
-            // Make a new TileBag
-            TileBag* tileBag = new TileBag();
-            tileBag->makeTiles();
+                // Make a new TileBag
+                TileBag* tileBag = new TileBag();
+                tileBag->makeTiles();
 
-            // Make a new Board    
-            Board* board = new Board();
+                // Make a new Board    
+                Board* board = new Board();
 
-            // Create two players
-            Player* player1 = new Player();
-            Player* player2 = new Player();
+                // Create two players
+                Player* player1 = new Player();
+                Player* player2 = new Player();
 
-            setupGame(tileBag, player1, player2);
-            //TESTED UNTIL HERE
+                setupGame(tileBag, player1, player2);
+                //TESTED UNTIL HERE
 
 
-            playTheGame(tileBag, board, player1, player2);
+                playTheGame(tileBag, board, player1, player2);
 
-            delete tileBag;
-            delete board;
-            delete player1;
-            delete player2;
+                delete tileBag;
+                delete board;
+                delete player1;
+                delete player2;
 
-            play = false;
-
-            //end of test
+                play = false;
             } 
             else if(menu == "2") {
-                // loadupGame(deckFilename, deck, player1);
+                // Make a new TileBag
+                TileBag* tileBag = new TileBag();
+
+                // Make a new Board    
+                Board* board = new Board();
+
+                // Create two players
+                Player* player1 = new Player();
+                Player* player2 = new Player();
+
+                loadupGame(tileBag, board, player1, player2);
             } 
             else if(menu == "3") {
                 credits();
@@ -170,7 +179,7 @@ void newGame(Player* player1, Player* player2) {
     std::cout << std::endl;
 
     AllUpper = true;
-    while(AllUpper) {
+    while(!std::cin.eof() && AllUpper) {
         std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl;
         std::cout << "> ";
         
@@ -219,7 +228,7 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 	std::cout << p_turn->getPlayerName() << ", it's your turn" << std::endl;
     std::cout << "Score for " << p_turn->getPlayerName() << ": " << p_turn->getPlayerScore() << std::endl;;
 	std::cout << "Score for " << p_wait->getPlayerName() << ": " << p_wait->getPlayerScore() << std::endl;;
-    printHand(p_turn->getHand());
+    printHand(std::cout, p_turn->getHand());
 
 	std::string command, tile, at, location;
     std::cout << std::endl;
@@ -245,7 +254,6 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 				board->add(location, t);
 				p_turn->getHand()->removeTile(tile);
                 p_turn->getHand()->addTile(TileBag->drawTile());
-                std::cout << "myscore: " << board->getScore(location) << std::endl;
                 p_turn->addScore(board->getScore(location));
                 std::cout << std::endl;
                 // check if first tile exists on the board
@@ -267,17 +275,56 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 		}
         delete t;
 	}
-	else {
-		std::cout << "Please enter a correct command " << std::endl;
+	else if (command == "save") {
+        tile = tile + "txt";
+		std::ofstream saveFile(tile);
+        saveFile << p_turn->getPlayerName() << std::endl;
+        saveFile << p_turn->getPlayerScore() << std::endl;
+        printHand(saveFile, p_turn->getHand());
+        saveFile << std::endl;
+        saveFile << p_wait->getPlayerName() << std::endl;
+        saveFile << p_wait->getPlayerScore() << std::endl;
+        printHand(saveFile, p_wait->getHand());
+        saveFile << std::endl;
+        saveFile << board->getBoardSize() << std::endl;
+        board->returnAllTilesinBoard(saveFile);
+        saveFile << std::endl;
+        printHand(saveFile, TileBag);
+        saveFile << std::endl;
+        saveFile << p_turn->getPlayerName() << std::endl;
+
+        saveFile.close();
+        std::cout << std::endl;
+        std::cout << "Game successfully saved" << std::endl;
         std::cout << std::endl;
 	}
 	return flag;
 }
 
 //HAVEN"T IMPLEMENTED
-void loadupGame() {
+void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2) {
+    std::cout << std::endl;
+    std::cout << "Enter the filename from which load a game" << std::endl;
+    std::cout << "> ";
 
+    std::string filename;
+    std::cin >> filename;
+
+    std::string Filename = filename + ".txt";
+    std::ifstream file(Filename);
+    if(!file)
+    {
+        std::cout << "Invalid input" << std::endl;
+    }
+    else {
+        // int numRead = 0;
+        // while(!file.eof() && numRead < LOAD_FILE_LINES) {
+        //     readPlayer(file);
+        // }
+    }
 }
+
+// bool readPlayer
 
 void credits() {
     std::string students[NUM_OF_STUDENT][NUM_OF_STUDENT_INFO] = {
