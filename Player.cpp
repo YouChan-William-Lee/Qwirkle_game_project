@@ -1,27 +1,27 @@
 #include "Player.h"
+#include "Tile.h"
+#include "utils.h"
 
 
 Player::Player() {
+    this->playerName = "Jake";
     this->score = 0;
-    hand = new Hand();
+    hand = new TileBag();
 }
-
 Player::Player(Player &other) {
     this->playerName = other.playerName;
     this->score = other.score;
     delete hand;
-    hand = new Hand(*other.hand);
+    hand = new TileBag(*other.hand);
 }
 Player::~Player() {
+    hand->clear();
     delete hand;
 }
     
 void Player::setInitialHand(TileBag* tileBag) {
-    Tile* drawnTile;
-    for (int i = 0; i < MAX_HAND_SIZE; i++) {
-        drawnTile = tileBag->drawTile();
-        hand->addTile(drawnTile);
-    }
+    delete hand;
+    hand = new TileBag(*tileBag);
 }
 
 std::string Player::getPlayerName() {
@@ -36,6 +36,15 @@ int Player::getPlayerScore() {
     return score;
 }
 
-Hand* Player::getHand() {
+TileBag* Player::getHand() {
     return hand;
+}
+
+Tile* Player::getATile(unsigned int index) {
+    Tile* tile = nullptr;
+    if(index <= hand->size()) {
+        tile = new Tile(*hand->get(index));
+    }
+    
+    return tile;
 }

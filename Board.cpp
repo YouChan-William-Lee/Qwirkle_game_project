@@ -10,15 +10,13 @@
 #define INITIAL_BOARD_COL_NUM 1
 
 Board::Board() {
-    Tile* tile = new Tile();
-    board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE, tile));
+    board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE));
 
     for(int i = 0; i != INITIAL_BOARD_ROW_SIZE ; ++i) {
         for (int j = 0; j != INITIAL_BOARD_COL_SIZE; ++j) {
             board[i][j] = new Tile();
         }
     }
-    delete tile;
 }
 Board::Board(Board& other) {
     clear();
@@ -93,32 +91,75 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 			if (neighbour_x < 0 || neighbour_x >= board.size() || neighbour_y < 0 || neighbour_y >= board[0].size()) {
 				deck_count += 1;
                 neighbour += 1;
-                std::cout <<"TEST1" << std::endl;
 			}
 			else {
                 Tile* t = board[neighbour_x][neighbour_y];
                 if(!(*first)) {
                     if (t->getColour() == ' ' || t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
 					deck_count += 1;
-                    std::cout <<"TEST2" << std::endl;
 				    }
                 }
                 else {
                     if(neighbour < 3 && t->getColour() == ' ') {
                         deck_count += 1;
                         neighbour += 1;
-                        std::cout <<"TEST3" << std::endl;
                     }
                     else if (t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
                         deck_count += 1;
-                        std::cout <<"TEST4" << std::endl;
                     }                    
                 }
 			}
 		}
-        std::cout <<deck_count << std::endl;
 	}
+
+    if (deck_count == 4) {
+        unsigned int resizedRow = 0;
+        unsigned int resizedCol = 0;
+        if (row == board.size() - 1 && col == board[0].size() - 1) {
+            resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
+            resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
+            if(resizedRow > 26) {
+                resizedRow = 26;
+            }
+            if(resizedCol > 26) {
+                resizedCol = 26;
+            }
+            reSize(resizedRow, resizedCol);
+        }
+        else if(row == board.size() - 1) {
+            resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
+            resizedCol = board[0].size();
+            if(resizedRow > 26) {
+                resizedRow = 26;
+            }
+            reSize(resizedRow, resizedCol);
+        }
+        else if(col == board[0].size() - 1) {
+            resizedRow = board.size();
+            resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
+            if(resizedCol > 26) {
+                resizedCol = 26;
+            }
+            reSize(resizedRow, resizedCol);
+        }
+    }
 	return (deck_count == 4 ? true : false);
+}
+
+void Board::reSize(unsigned int row, unsigned int col) {
+    board.resize(row);
+
+    for(unsigned int i = 0; i != board.size(); ++i) {
+        board[i].resize(col);
+    }
+
+    for(unsigned int i = 0; i != board.size(); ++i) {
+        for(unsigned int j = 0; j != board[0].size(); ++j) {
+            if(board[i][j] == nullptr) {
+                board[i][j] = new Tile();
+            }
+        }
+    }
 }
 
 void Board::clear() {

@@ -14,10 +14,12 @@ class Board {
         //Print current board
         void getBoard();
 
-        bool check(std::string x, Tile* tile, bool* first);
-
         //Add a tile to the bag
         void add(std::string x, Tile* tile);
+
+        bool check(std::string x, Tile* tile, bool* first);
+
+        void reSize(unsigned int row, unsigned int col);
 
         //Removes all tiles from the bag
         //Deletes the bag

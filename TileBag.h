@@ -21,7 +21,7 @@ class TileBag {
         void makeTiles();
 
         //Returns the current size of the bag
-        int size();
+        unsigned int size();
 
         //Get tile from the bag
         Tile* drawTile();
@@ -31,6 +31,21 @@ class TileBag {
 
         //Remove a tile from the bag
         void remove();
+
+        //Get a tile at the given index from the bag
+        Tile* get(int index);
+        
+        Tile* getTilebyName(std::string tilename);
+
+        bool removeTile(Tile* tile);
+
+        void removeTile(std::string tilename);
+
+        void addTile(Tile* tile);
+
+        //Removes all tiles from the bag
+        //Deletes the bag
+        void clear();
 
     private:
         LinkedList* tileBag;

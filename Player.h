@@ -1,8 +1,8 @@
 #ifndef ASSIGN2_PLAYER_H
 #define ASSIGN2_PLAYER_H 
 
-#include "Hand.h"
 #include "TileBag.h"
+#include "LinkedList.h"
 
 #include <string>
 
@@ -41,13 +41,18 @@ class Player {
         /**
          * Returns the players hand
          */
-        Hand* getHand();
+        TileBag* getHand();
+
+        /**
+         * Returns the tile at the given index in the players hand
+         */
+        Tile* getATile(unsigned int index);
 
     private:
         std::string playerName;
         int score;
 
-        Hand* hand;
+        TileBag* hand;
 };
 
 #endif // ASSIGN2_PLAYER_H

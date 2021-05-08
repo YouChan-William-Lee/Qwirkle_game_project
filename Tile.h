@@ -12,19 +12,19 @@ typedef int Shape;
 class Tile {
 
    public:
+      Colour colour;
+      Shape shape;
+      
       Tile();
       Tile(Colour, Shape);
       Tile(Tile& other);
       ~Tile();
 
       Colour getColour();
-      Shape getShape(); 
+      Shape getShape();
+
       void setColour(Colour colour);
       void setShape(Shape shape);
-   
-   private:
-      Colour colour;
-      Shape shape;
 };
 
 

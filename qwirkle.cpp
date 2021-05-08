@@ -19,7 +19,7 @@ void welcomeMessage();
 void mainMenu();
 void setupGame(TileBag* tilebag, Player* player1, Player* player2);
 void newGame(Player* player1, Player* player2);
-void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2, int currentPlayer);
+void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
 int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first);
 void loadupGame();
 void credits();
@@ -33,11 +33,17 @@ int main(int argc, char** argv) {
 
     while(play) {
         mainMenu();
+
+        // LinkedList* list = new LinkedList();
+
         std::string menu = "";
         std::cin >> menu;
 
         if(menu >= "1" && menu <= "4") {
             if(menu == "1") {
+            // setupGame(deck, player1, player2);
+            //testing tileBag implementation
+            //remove later
 
             // Make a new TileBag
             TileBag* tileBag = new TileBag();
@@ -51,9 +57,10 @@ int main(int argc, char** argv) {
             Player* player2 = new Player();
 
             setupGame(tileBag, player1, player2);
+            //TESTED UNTIL HERE
 
 
-            playTheGame(tileBag, board, player1, player2, 1);
+            playTheGame(tileBag, board, player1, player2);
 
             delete tileBag;
             delete board;
@@ -109,12 +116,28 @@ void mainMenu() {
 void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
     // Set players' name
     newGame(player1, player2);
+    
+    // Create 2 new temporary TileBags
+    TileBag* initialHand1 = new TileBag();
+    TileBag* initialHand2 = new TileBag();
 
     // Set player1 hand
-    player1->setInitialHand(tileBag);
+    int i = 0;
+    while (i < MAX_HAND_SIZE) {
+        initialHand1->add(tileBag->drawTile());   
+        ++i;
+    }
+    player1->setInitialHand(initialHand1);
+    delete initialHand1;
 
-    //Set player2 hand
-    player2->setInitialHand(tileBag);
+    // Set player2 hand
+    i = 0;
+    while (i < MAX_HAND_SIZE) {
+        initialHand2->add(tileBag->drawTile());   
+        ++i;
+    }
+    player2->setInitialHand(initialHand2);
+    delete initialHand2;
 }
 
 void newGame(Player* player1, Player* player2) {
@@ -128,7 +151,7 @@ void newGame(Player* player1, Player* player2) {
         std::cout << "> ";
 
         std::cin >> name;
-        for (long unsigned int i = 0; i < name.length() && AllUpper; ++i){
+        for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
             if(!isupper(name[i])) {
                 AllUpper = false;
                 std::cout << "Invalid input" << std::endl;
@@ -152,7 +175,7 @@ void newGame(Player* player1, Player* player2) {
         std::cout << "> ";
         
         std::cin >> name;
-        for (long unsigned int i = 0; i < name.length() && AllUpper; ++i){
+        for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
             if(!isupper(name[i])) {
                 AllUpper = false;
                 std::cout << "Invalid input" << std::endl;
@@ -173,11 +196,11 @@ void newGame(Player* player1, Player* player2) {
     std::cout << std::endl;
 }
 
-void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2, int currentPlayer) {
-	int turn = 0;
+void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2) {
+    int turn = 0;
     bool value = false;
     bool* first = &value;
-	while (!std::cin.eof() && tilebag->size() != 0 && player1->getHand()->getSize() != 0 && player2->getHand()->getSize() != 0) {
+	while (!std::cin.eof() && tilebag->size() != 0 && player1->getHand()->size() != 0 && player2->getHand()->size() != 0) {
 
 		board->getBoard();
 		if (turn == 0) {
@@ -196,7 +219,7 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 	std::cout << p_turn->getPlayerName() << ", it's your turn" << std::endl;
     std::cout << "Score for " << p_turn->getPlayerName() << ": " << p_turn->getPlayerScore() << std::endl;;
 	std::cout << "Score for " << p_wait->getPlayerName() << ": " << p_wait->getPlayerScore() << std::endl;;
-    p_turn->getHand()->displayTiles();
+    printHand(p_turn->getHand());
 
 	std::string command, tile, at, location;
     std::cout << std::endl;
@@ -206,7 +229,7 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 		Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
         if (t != nullptr) {
             TileBag->add(t);
-            p_turn->getHand()->removeTile(t);
+            p_turn->getHand()->removeTile(tile);
             p_turn->getHand()->addTile(TileBag->drawTile());
             std::cout << std::endl;
         }
@@ -240,6 +263,7 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 			std::cout << "Please enter correct Tile" << std::endl;
             std::cout << std::endl;
 		}
+        delete t;
 	}
 	else {
 		std::cout << "Please enter a correct command " << std::endl;
