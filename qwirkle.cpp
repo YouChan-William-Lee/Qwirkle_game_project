@@ -39,17 +39,11 @@ int main(int argc, char** argv) {
 
     while(!std::cin.eof() && play) {
         mainMenu();
-
-        // LinkedList* list = new LinkedList();
-
         std::string menu = "";
         std::cin >> menu;
 
         if(menu >= "1" && menu <= "4") {
             if(menu == "1") {
-                // setupGame(deck, player1, player2);
-                //testing tileBag implementation
-                //remove later
 
                 // Make a new TileBag
                 TileBag* tileBag = new TileBag();
@@ -63,7 +57,6 @@ int main(int argc, char** argv) {
                 Player* player2 = new Player();
 
                 setupGame(tileBag, player1, player2);
-                //TESTED UNTIL HERE
 
                 playTheGame(tileBag, board, player1, player2);
 
@@ -306,8 +299,6 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
                 if (*first == false) {
                     *first = true;
                 }
-                // Couldn't implement score yet
-                //score += board->getScore(loc);
                 flag = 1;
             }
             else {
