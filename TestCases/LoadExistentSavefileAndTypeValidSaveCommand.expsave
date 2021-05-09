@@ -1,0 +1,51 @@
+Welcome to Qwirkle!
+-------------------
+
+Menu
+----
+1. New Game
+2. Load Game
+3. Credits (Show student information)
+4. Quit
+
+> 
+Enter the filename from which load a game
+> 
+Qwirkle game successfully loaded
+
+   0  1  2  3  4  5 
+  -------------------
+A |  |  |  |  |  |  |
+B |  |  |  |  |  |  |
+C |  |  |  |  |  |  |
+D |  |  |P3|P6|  |  |
+E |  |  |  |R6|  |  |
+F |  |  |  |  |  |  |
+
+JOHN, it's your turn
+Score for JOHN: 2
+Score for WILL: 2
+Y5,O4,R2,O3,B3,G1
+> 
+Game successfully saved
+
+   0  1  2  3  4  5 
+  -------------------
+A |  |  |  |  |  |  |
+B |  |  |  |  |  |  |
+C |  |  |  |  |  |  |
+D |  |  |P3|P6|  |  |
+E |  |  |  |R6|  |  |
+F |  |  |  |  |  |  |
+
+JOHN, it's your turn
+Score for JOHN: 2
+Score for WILL: 2
+Y5,O4,R2,O3,B3,G1
+> Invalid input
+
+Game over
+Score for JOHN: 2
+Score for WILL: 2
+Draw!
+Goodbye
