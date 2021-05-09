@@ -1,8 +1,8 @@
 #ifndef ASSIGN2_PLAYER_H
 #define ASSIGN2_PLAYER_H 
 
-#include "TileBag.h"
 #include "LinkedList.h"
+#include "Hand.h"
 
 #include <string>
 
@@ -18,10 +18,10 @@ class Player {
         ~Player();
         
         /**
-         * Sets the initial hand for the deck using the given TileBag.
-         * Keeps an internal copy of the given TileBag.
+         * Sets the initial hand for the deck using the given Hand.
+         * Keeps an internal copy of the given Hand.
          */
-        void setInitialHand(TileBag* tilebag);
+        void setInitialHand(Hand* hand);
 
         /**
          * Return the player number
@@ -41,7 +41,7 @@ class Player {
         /**
          * Returns the players hand
          */
-        TileBag* getHand();
+        Hand* getHand();
 
         /**
          * Returns the tile at the given index in the players hand
@@ -54,7 +54,7 @@ class Player {
         std::string playerName;
         int score;
 
-        TileBag* hand;
+        Hand* hand;
 };
 
 #endif // ASSIGN2_PLAYER_H

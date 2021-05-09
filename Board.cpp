@@ -130,68 +130,74 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 	for (unsigned int i = 1; i < x.length(); i++) {
 		col = col * 10 + (int)(x[i] - '0');
 	}
-	int deck_count = 0;
-    int neighbour = 0;
-    //Check empty tile
-	if (board[row][col]->getColour() == EMPTY_TILE) {
-		for (int i = 0; i < NEIGHBOURS; i++) {
-			unsigned int neighbour_x = nx[i] + row;
-			unsigned int neighbour_y = ny[i] + col;
-			if (neighbour_x < 0 || neighbour_x >= board.size() || neighbour_y < 0 || neighbour_y >= board[0].size()) {
-				deck_count += 1;
-                neighbour += 1;
-			}
-			else {
-                Tile* t = board[neighbour_x][neighbour_y];
-                if(!(*first)) {
-                    if (t->getColour() == EMPTY_TILE || t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
-					deck_count += 1;
-				    }
+
+    int deck_count = 0;
+
+    //Check location validation
+    if(row >= 0 && row < board.size() && col >=0 && col < board[0].size()) {
+        int neighbour = 0;
+        //Check empty tile
+        if (board[row][col]->getColour() == EMPTY_TILE) {
+            for (int i = 0; i < NEIGHBOURS; i++) {
+                unsigned int neighbour_x = nx[i] + row;
+                unsigned int neighbour_y = ny[i] + col;
+                if (neighbour_x < 0 || neighbour_x >= board.size() || neighbour_y < 0 || neighbour_y >= board[0].size()) {
+                    deck_count += 1;
+                    neighbour += 1;
                 }
                 else {
-                    if(neighbour < 3 && t->getColour() == ' ') {
+                    Tile* t = board[neighbour_x][neighbour_y];
+                    if(!(*first)) {
+                        if (t->getColour() == EMPTY_TILE || t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
                         deck_count += 1;
-                        neighbour += 1;
+                        }
                     }
-                    else if (t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
-                        deck_count += 1;
-                    }                    
+                    else {
+                        if(neighbour < 3 && t->getColour() == ' ') {
+                            deck_count += 1;
+                            neighbour += 1;
+                        }
+                        else if (t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
+                            deck_count += 1;
+                        }                    
+                    }
                 }
-			}
-		}
-	}
+            }
+        }
 
-    if (deck_count == ALL_CONDITONS) {
-        unsigned int resizedRow = 0;
-        unsigned int resizedCol = 0;
-        if (row == board.size() - 1 && col == board[0].size() - 1) {
-            resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
-            resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
-            if(resizedRow > MAXIMUM_VECTOR_SIZE) {
-                resizedRow = MAXIMUM_VECTOR_SIZE;
+        if (deck_count == ALL_CONDITONS) {
+            unsigned int resizedRow = 0;
+            unsigned int resizedCol = 0;
+            if (row == board.size() - 1 && col == board[0].size() - 1) {
+                resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
+                resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
+                if(resizedRow > MAXIMUM_VECTOR_SIZE) {
+                    resizedRow = MAXIMUM_VECTOR_SIZE;
+                }
+                if(resizedCol > MAXIMUM_VECTOR_SIZE) {
+                    resizedCol = MAXIMUM_VECTOR_SIZE;
+                }
+                reSize(resizedRow, resizedCol);
             }
-            if(resizedCol > MAXIMUM_VECTOR_SIZE) {
-                resizedCol = MAXIMUM_VECTOR_SIZE;
+            else if(row == board.size() - 1) {
+                resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
+                resizedCol = board[0].size();
+                if(resizedRow > MAXIMUM_VECTOR_SIZE) {
+                    resizedRow = MAXIMUM_VECTOR_SIZE;
+                }
+                reSize(resizedRow, resizedCol);
             }
-            reSize(resizedRow, resizedCol);
-        }
-        else if(row == board.size() - 1) {
-            resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
-            resizedCol = board[0].size();
-            if(resizedRow > MAXIMUM_VECTOR_SIZE) {
-                resizedRow = MAXIMUM_VECTOR_SIZE;
+            else if(col == board[0].size() - 1) {
+                resizedRow = board.size();
+                resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
+                if(resizedCol > MAXIMUM_VECTOR_SIZE) {
+                    resizedCol = MAXIMUM_VECTOR_SIZE;
+                }
+                reSize(resizedRow, resizedCol);
             }
-            reSize(resizedRow, resizedCol);
-        }
-        else if(col == board[0].size() - 1) {
-            resizedRow = board.size();
-            resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
-            if(resizedCol > MAXIMUM_VECTOR_SIZE) {
-                resizedCol = MAXIMUM_VECTOR_SIZE;
-            }
-            reSize(resizedRow, resizedCol);
         }
     }
+	
 	return (deck_count == ALL_CONDITONS ? true : false);
 }
 

@@ -6,22 +6,22 @@
 Player::Player() {
     this->playerName = "Jake";
     this->score = 0;
-    hand = new TileBag();
+    hand = new Hand();
 }
 Player::Player(Player &other) {
     this->playerName = other.playerName;
     this->score = other.score;
     delete hand;
-    hand = new TileBag(*other.hand);
+    hand = new Hand(*other.hand);
 }
 Player::~Player() {
     hand->clear();
     delete hand;
 }
     
-void Player::setInitialHand(TileBag* tileBag) {
-    delete hand;
-    hand = new TileBag(*tileBag);
+void Player::setInitialHand(Hand* hand) {
+    delete this->hand;
+    this->hand = new Hand(*hand);
 }
 
 std::string Player::getPlayerName() {
@@ -36,7 +36,7 @@ int Player::getPlayerScore() {
     return score;
 }
 
-TileBag* Player::getHand() {
+Hand* Player::getHand() {
     return hand;
 }
 

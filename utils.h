@@ -6,8 +6,9 @@
 #include "TileCodes.h"
 
 class TileBag;
+class Hand;
 
-void printHand(std::ostream& file, TileBag* tileBag);
+void printHand(std::ostream& file, Hand* hand);
 void printTile(std::ostream& output,Tile* tile);
 void printColourAsString(std::ostream& output,Colour colour);
 void printShapeAsString(std::ostream& output,Shape shape);

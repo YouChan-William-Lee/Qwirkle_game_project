@@ -16,6 +16,7 @@
 #include "TileCodes.h"
 #include "utils.h"
 #include "Board.h"
+#include "Hand.h"
 
 void welcomeMessage();
 void mainMenu();
@@ -24,6 +25,7 @@ void newGame(Player* player1, Player* player2);
 void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
 int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first);
 void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
+void invalidInput();
 void credits();
 void cleanupGame();
 
@@ -103,7 +105,7 @@ int main(int argc, char** argv) {
             } 
         }
         else {
-            std::cout << "Invalid input" << std::endl;
+            invalidInput();
         }
     }
 
@@ -136,14 +138,14 @@ void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
     // Set players' name
     newGame(player1, player2);
     
-    // Create 2 new temporary TileBags
-    TileBag* initialHand1 = new TileBag();
-    TileBag* initialHand2 = new TileBag();
+    // Create 2 new temporary Hands
+    Hand* initialHand1 = new Hand();
+    Hand* initialHand2 = new Hand();
 
     // Set player1 hand
     int i = 0;
     while (i < MAX_HAND_SIZE) {
-        initialHand1->add(tileBag->drawTile());   
+        initialHand1->add(tileBag->drawTile());  
         ++i;
     }
     player1->setInitialHand(initialHand1);
@@ -173,8 +175,7 @@ void newGame(Player* player1, Player* player2) {
         for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
             if(!isupper(name[i])) {
                 AllUpper = false;
-                std::cout << "Invalid input" << std::endl;
-                std::cout << std::endl;
+                invalidInput();
             }
         }
         if(AllUpper) {
@@ -197,8 +198,7 @@ void newGame(Player* player1, Player* player2) {
         for (unsigned int i = 0; i < name.length() && AllUpper; ++i){
             if(!isupper(name[i])) {
                 AllUpper = false;
-                std::cout << "Invalid input" << std::endl;
-                std::cout << std::endl;
+                invalidInput();
             }
         }
         if(AllUpper) {
@@ -230,15 +230,15 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
 		}
 		turn %= 2;
 	}
-
+    std::cout << std::endl;
     std::cout << "Game over" << std::endl;
     std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
     std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
     if(player1->getPlayerScore() > player2->getPlayerScore()) {
-        std::cout << player1->getPlayerName() << " won!" << std::endl;
+        std::cout << "Player " << player1->getPlayerName() << " won!" << std::endl;
     }
     else if(player1->getPlayerScore() < player2->getPlayerScore()) {
-        std::cout << player2->getPlayerName() << " won!" << std::endl;
+        std::cout << "Player " << player2->getPlayerName() << " won!" << std::endl;
     }
     else {
         std::cout << "Draw!" << std::endl;
@@ -261,24 +261,25 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 	std::cout << "> ";
 	std::cin >> command >> tile;
 	if (command == "replace") {
-		Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
-        if (t != nullptr) {
+        if(p_turn->getHand()->getTilebyName(tile) != nullptr) {
+            Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
             TileBag->add(t);
             p_turn->getHand()->removeTile(tile);
             p_turn->getHand()->addTile(TileBag->drawTile());
             std::cout << std::endl;
         }
         else {
-            std::cout << "Ivalid input" << std::endl;
+            invalidInput();
         }
 	}
 	else if (command == "place") {
 		std::cin >> at >> location;
-		Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
-		if (t != nullptr) {
-			if (board->check(location, t, first)) {
-				board->add(location, t);
-				p_turn->getHand()->removeTile(tile);
+        if(p_turn->getHand()->getTilebyName(tile) != nullptr) {
+            Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
+            
+            if (board->check(location, t, first)) {
+                board->add(location, t);
+                p_turn->getHand()->removeTile(tile);
                 p_turn->getHand()->addTile(TileBag->drawTile());
                 p_turn->addScore(board->getScore(location));
                 std::cout << std::endl;
@@ -287,19 +288,17 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
                     *first = true;
                 }
                 // Couldn't implement score yet
-				//score += board->getScore(loc);
-				flag = 1;
-			}
-			else {
-				std::cout << "Cannot put the tile at " << location << std::endl;
-                std::cout << std::endl;
-			}
-		}
+                //score += board->getScore(loc);
+                flag = 1;
+            }
+            else {
+                invalidInput();
+            }
+            delete t;
+        }
 		else {
-			std::cout << "Please enter correct Tile" << std::endl;
-            std::cout << std::endl;
-		}
-        delete t;
+            invalidInput();
+        }
 	}
 	else if (command == "save") {
         //Save a game
@@ -316,7 +315,7 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
         saveFile << board->getBoardSize() << std::endl;
         board->returnAllTilesinBoard(saveFile);
         saveFile << std::endl;
-        printHand(saveFile, TileBag);
+        printTileBag(saveFile, TileBag);
         saveFile << std::endl;
         saveFile << p_turn->getPlayerName() << std::endl;
 
@@ -325,7 +324,15 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
         std::cout << "Game successfully saved" << std::endl;
         std::cout << std::endl;
 	}
+    else {
+        invalidInput();
+    }
 	return flag;
+}
+
+void invalidInput() {
+    std::cout << "Invalid input" << std::endl;
+    std::cout << std::endl;
 }
 
 //HAVEN"T IMPLEMENTED
@@ -334,14 +341,17 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
     std::cout << "Enter the filename from which load a game" << std::endl;
     std::cout << "> ";
 
+    //Take the file name
     std::string filename;
     std::cin >> filename;
 
     std::string Filename = filename + ".txt";
     std::ifstream file(Filename);
+
+    //Check if the file exists
     if(!file)
     {
-        std::cout << "Invalid input" << std::endl;
+        invalidInput();
     }
     else {
         //Read player1 name
@@ -358,7 +368,7 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
         std::string player1hand = "";
         std::getline(file, player1hand);
         std::stringstream ss1(player1hand);
-        TileBag* initialHand1 = new TileBag();
+        Hand* initialHand1 = new Hand();
         
         while (ss1.good()) {
             std::string substr;
@@ -382,7 +392,7 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
         std::string player2hand = "";
         std::getline(file, player2hand);
         std::stringstream ss2(player2hand);
-        TileBag* initialHand2 = new TileBag();
+        Hand* initialHand2 = new Hand();
         
         while (ss2.good()) {
             std::string substr;
@@ -436,8 +446,7 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
     }
 }
 
-// bool readPlayer
-
+// Show students credits
 void credits() {
     std::string students[NUM_OF_STUDENT][NUM_OF_STUDENT_INFO] = {
         {"Dunith Nadvi Karawita", "s3823697", "s3823697@student.rmit.edu.au"},

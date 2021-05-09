@@ -1,15 +1,16 @@
 #include "utils.h"
 #include "TileBag.h"
+#include "Hand.h"
 
 #include <iostream>
 
-void printHand(std::ostream& file, TileBag* tileBag) {
-    if(tileBag->size() != 0) {
-        for (unsigned int i = 0; i < tileBag->size(); ++i) {
-            if (tileBag->get(i) != nullptr) {
-                printTile(file, tileBag->get(i));
+void printHand(std::ostream& file, Hand* hand) {
+    if(hand->size() != 0) {
+        for (unsigned int i = 0; i < hand->size(); ++i) {
+            if (hand->get(i) != nullptr) {
+                printTile(file, hand->get(i));
             }
-            if (i != tileBag->size() - 1) {
+            if (i != hand->size() - 1) {
                 file << ",";
             }
         }
