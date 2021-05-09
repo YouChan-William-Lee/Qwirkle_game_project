@@ -15,9 +15,6 @@
 #define MAXIMUM_VECTOR_SIZE 26
 #define ALL_CONDITONS 4
 #define NEIGHBOURS 4
-#define TENS_PLACE 10
-#define QWIRKLE_NUMBER_WITHOUT_MYSELF 5
-#define QWIRKLE_POINTS 12
 
 Board::Board() {
     board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE));

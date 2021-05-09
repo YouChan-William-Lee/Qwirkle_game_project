@@ -112,7 +112,7 @@ Tile* LinkedList::find_tile(std::string tile) {
 	Colour c = tile[0];
 	Shape s = 0;
 	for (unsigned int i = 1; i < tile.length(); i++) {
-		s = s * 10 + (tile[i] - '0');
+		s = s * TENS_PLACE + (tile[i] - '0');
 	}
 	int index = -1;
 	for (unsigned int i = 0; index == -1 && i < size(); i++) {
@@ -171,7 +171,7 @@ void LinkedList::remove_tile(std::string tile) {
     Colour c = tile[0];
 	Shape s = 0;
 	for (unsigned int i = 1; i < tile.length(); i++) {
-		s = s * 10 + (tile[i] - '0');
+		s = s * TENS_PLACE + (tile[i] - '0');
 	}
 	int index = -1;
 	for (unsigned int i = 0; index == -1 && i < this->size(); i++) {
