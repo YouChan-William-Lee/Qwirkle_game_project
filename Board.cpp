@@ -15,6 +15,9 @@
 #define MAXIMUM_VECTOR_SIZE 26
 #define ALL_CONDITONS 4
 #define NEIGHBOURS 4
+#define TENS_PLACE 10
+#define QWIRKLE_NUMBER_WITHOUT_MYSELF 5
+#define QWIRKLE_POINTS 12
 
 Board::Board() {
     board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE));
@@ -103,7 +106,7 @@ void Board::add(std::string x, Tile* tile) {
     unsigned int row = (int)(x[0] - 'A');
 	unsigned int col = 0;
 	for (unsigned int i = 1; i < x.length(); i++) {
-		col = col * 10 + (int)(x[i] - '0');
+		col = col * TENS_PLACE + (int)(x[i] - '0');
 	}
 
     board[row][col]->setColour(tile->getColour());
@@ -128,7 +131,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 	unsigned int row = (int)(x[0] - 'A');
 	unsigned int col = 0;
 	for (unsigned int i = 1; i < x.length(); i++) {
-		col = col * 10 + (int)(x[i] - '0');
+		col = col * TENS_PLACE + (int)(x[i] - '0');
 	}
 
     int deck_count = 0;
@@ -229,7 +232,7 @@ int Board::getScore(std::string tile) {
     int row = (int)(tile[0] - 'A');
 	int col = 0;
 	for (unsigned int i = 1; i < tile.length(); ++i) {
-		col = col * 10 + (int)(tile[i] - '0');
+		col = col * TENS_PLACE + (int)(tile[i] - '0');
 	}
 	int my_score = 0;
 
@@ -279,16 +282,16 @@ int Board::getScore(std::string tile) {
 	}
 
     bool qwirkle = false;
-    if(num_of_top + num_of_bot == 5) {
-        my_score += 12;
+    if(num_of_top + num_of_bot == QWIRKLE_NUMBER_WITHOUT_MYSELF) {
+        my_score += QWIRKLE_POINTS;
         qwirkle = true;
     }
     else if(num_of_top != 0 || num_of_bot != 0) {
         my_score += num_of_top + num_of_bot + 1;
     }
 
-    if(num_of_left + num_of_right == 5) {
-        my_score += 12;
+    if(num_of_left + num_of_right == QWIRKLE_NUMBER_WITHOUT_MYSELF) {
+        my_score += QWIRKLE_POINTS;
         qwirkle = true;
     }
     else if(num_of_left != 0 || num_of_right != 0) {
