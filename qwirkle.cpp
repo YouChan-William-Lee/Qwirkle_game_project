@@ -19,12 +19,14 @@
 #include "Hand.h"
 
 void welcomeMessage();
+void goodbyeMessage();
 void mainMenu();
 void setupGame(TileBag* tilebag, Player* player1, Player* player2);
 void newGame(Player* player1, Player* player2);
 void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
 int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first);
-void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
+bool loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2);
+void cleanupGame(TileBag* tileBag, Board* board, Player* player1, Player* player2);
 void invalidInput();
 void credits();
 void cleanupGame();
@@ -63,13 +65,9 @@ int main(int argc, char** argv) {
                 setupGame(tileBag, player1, player2);
                 //TESTED UNTIL HERE
 
-
                 playTheGame(tileBag, board, player1, player2);
 
-                delete tileBag;
-                delete board;
-                delete player1;
-                delete player2;
+                cleanupGame(tileBag, board, player1, player2);
 
                 play = false;
             } 
@@ -84,24 +82,18 @@ int main(int argc, char** argv) {
                 Player* player1 = new Player();
                 Player* player2 = new Player();
 
-                loadupGame(tileBag, board, player1, player2);
+                if(loadupGame(tileBag, board, player1, player2)) {
+                    playTheGame(tileBag, board, player1, player2);
+                    play = false;
+                }
 
-                playTheGame(tileBag, board, player1, player2);
-
-                delete tileBag;
-                delete board;
-                delete player1;
-                delete player2;
-
-                play = false;
+                cleanupGame(tileBag, board, player1, player2);               
             } 
             else if(menu == "3") {
                 credits();
             } 
             else {
                 play = false;
-                std::cout << std::endl;
-                std::cout << "Goodbye" << std::endl;
             } 
         }
         else {
@@ -109,16 +101,37 @@ int main(int argc, char** argv) {
         }
     }
 
-    // Cleanup - delete all the objects
-    // cleanupGame(deck, player1);
+    goodbyeMessage();
 
     return EXIT_SUCCESS;
+}
+
+void goodbyeMessage() {
+    std::cout << "Goodbye" << std::endl;
 }
 
 // Display welcome message
 void welcomeMessage() {
     std::cout << "Welcome to Qwirkle!" << std::endl;
     std::cout << "-------------------" << std::endl;
+}
+
+// Display invalid input message
+void invalidInput() {
+    std::cout << "Invalid input" << std::endl;
+    std::cout << std::endl;
+}
+
+// Delete all the objects
+void cleanupGame(TileBag* tileBag, Board* board, Player* player1, Player* player2) {
+    delete tileBag;
+    tileBag = nullptr;
+    delete board;
+    board = nullptr;
+    delete player1;
+    player1 = nullptr;
+    delete player2; 
+    player2 = nullptr;
 }
 
 // Display main menu
@@ -134,6 +147,7 @@ void mainMenu() {
     std::cout << "> ";
 }
 
+// Set up player's hand
 void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
     // Set players' name
     newGame(player1, player2);
@@ -161,6 +175,7 @@ void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
     delete initialHand2;
 }
 
+// Set up player's info
 void newGame(Player* player1, Player* player2) {
     std::cout << "Starting a New Game" << std::endl;
     std::cout << std::endl;
@@ -215,6 +230,7 @@ void newGame(Player* player1, Player* player2) {
     std::cout << std::endl;
 }
 
+// Player the game
 void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2) {
     int turn = 0;
     bool value = false;
@@ -230,7 +246,6 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
 		}
 		turn %= 2;
 	}
-    std::cout << std::endl;
     std::cout << "Game over" << std::endl;
     std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
     std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
@@ -243,11 +258,9 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
     else {
         std::cout << "Draw!" << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << "Goodbye" << std::endl;
-
 }
 
+// Player place a tile on the board or replace a tile or save this game
 int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, bool* first) {
     int flag = 0;
     std::cout << std::endl;
@@ -265,7 +278,10 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
             Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
             TileBag->add(t);
             p_turn->getHand()->removeTile(tile);
-            p_turn->getHand()->addTile(TileBag->drawTile());
+            Tile* tile = TileBag->drawTile();
+            if(tile != nullptr) {
+                p_turn->getHand()->addTile(tile);
+            }
             std::cout << std::endl;
         }
         else {
@@ -276,11 +292,14 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 		std::cin >> at >> location;
         if(p_turn->getHand()->getTilebyName(tile) != nullptr) {
             Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
-            
+
             if (board->check(location, t, first)) {
                 board->add(location, t);
                 p_turn->getHand()->removeTile(tile);
-                p_turn->getHand()->addTile(TileBag->drawTile());
+                Tile* tile = TileBag->drawTile();
+                if(tile != nullptr) {
+                    p_turn->getHand()->addTile(tile);
+                }
                 p_turn->addScore(board->getScore(location));
                 std::cout << std::endl;
                 // check if first tile exists on the board
@@ -330,13 +349,9 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
 	return flag;
 }
 
-void invalidInput() {
-    std::cout << "Invalid input" << std::endl;
-    std::cout << std::endl;
-}
-
-//HAVEN"T IMPLEMENTED
-void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2) {
+// Load existent savefile
+bool loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2) {
+    bool loadSuccess = false;
     std::cout << std::endl;
     std::cout << "Enter the filename from which load a game" << std::endl;
     std::cout << "> ";
@@ -443,7 +458,9 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
         std::cout << std::endl;
         std::cout << "Qwirkle game successfully loaded" << std::endl;
         std::cout << std::endl;
+        loadSuccess = true;
     }
+    return loadSuccess;
 }
 
 // Show students credits

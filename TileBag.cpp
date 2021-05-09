@@ -65,8 +65,14 @@ void TileBag::addTileByName(std::string tile) {
 }
 
 Tile* TileBag::drawTile() {
-    Tile* returnTile = new Tile(*tileBag->getfront());
-    tileBag->remove_front();
+    Tile* returnTile = nullptr;
+
+    //If there exists tiles
+    if(tileBag->getfront() != nullptr) {
+        returnTile = new Tile(*tileBag->getfront());
+        tileBag->remove_front();
+    }
+    
     return returnTile;
 }
 
