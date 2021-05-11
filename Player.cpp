@@ -47,7 +47,7 @@ void Player::addScore(int addScore) {
 Tile* Player::getATile(unsigned int index) {
     Tile* tile = nullptr;
     if(index <= hand->size()) {
-        tile = new Tile(*hand->get(index));
+        tile = new Tile(*hand->getByIndex(index));
     }
     
     return tile;

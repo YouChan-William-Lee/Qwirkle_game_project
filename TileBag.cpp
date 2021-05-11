@@ -49,11 +49,6 @@ unsigned int TileBag::size() {
     return tileBag->size();
 }
 
-
-void TileBag::add(Tile* tile) {
-    tileBag->add_back(tile);
-}
-
 void TileBag::addTileByName(std::string tile) {
     std::string str1(1, tile[0]);
     Colour colour = changeStringToColour(str1);
@@ -76,8 +71,8 @@ Tile* TileBag::drawTile() {
     return returnTile;
 }
 
-Tile* TileBag::get(int index) {
-    return tileBag->get(index);
+Tile* TileBag::getByIndex(int index) {
+    return tileBag->getByIndex(index);
 }
 
 Tile* TileBag::getTilebyName(std::string tilename) {

@@ -168,7 +168,7 @@ void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
     // Set player1 hand
     int i = 0;
     while (i < MAX_HAND_SIZE) {
-        initialHand1->add(tileBag->drawTile());  
+        initialHand1->addTile(tileBag->drawTile());  
         ++i;
     }
     player1->setInitialHand(initialHand1);
@@ -177,7 +177,7 @@ void setupGame(TileBag* tileBag, Player* player1, Player* player2) {
     // Set player2 hand
     i = 0;
     while (i < MAX_HAND_SIZE) {
-        initialHand2->add(tileBag->drawTile());   
+        initialHand2->addTile(tileBag->drawTile());   
         ++i;
     }
     player2->setInitialHand(initialHand2);
@@ -303,7 +303,7 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
         if(p_turn->getHand()->getTilebyName(tile) != nullptr) {
             Tile* t = new Tile(*p_turn->getHand()->getTilebyName(tile));
             // Add this tile to TileBag
-            TileBag->add(t);
+            TileBag->addTile(t);
             // Remove this tile from player hand
             p_turn->getHand()->removeTile(tile);
             // Take one tile from TileBag

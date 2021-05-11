@@ -11,35 +11,27 @@
 
 class Hand {
     public:
-    
         Hand();
         Hand(Hand& other);
         ~Hand();
 
-        //Returns the current size of the bag
+        //Return the current size of the bag
         unsigned int size();
 
-        //Get tile from the bag
-        Tile* drawTile();
+        //Add this tile to hand
+        void addTile(Tile* tile);
 
-        //Add a tile to the bag
-        void add(Tile* tile);
-
+        //Add this tile which has tile(string) to hand
         void addTileByName(std::string tile);
 
-        //Remove a tile from the bag
-        void remove();
-
         //Get a tile at the given index from the bag
-        Tile* get(int index);
+        Tile* getByIndex(int index);
         
+        //Return a tile which has tilename(string)
         Tile* getTilebyName(std::string tilename);
 
-        bool removeTile(Tile* tile);
-
+        //Remove a tile which has tilename(string)
         void removeTile(std::string tilename);
-
-        void addTile(Tile* tile);
 
         //Removes all tiles from the bag
         //Deletes the bag

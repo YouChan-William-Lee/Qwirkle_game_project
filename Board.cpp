@@ -73,7 +73,13 @@ void Board::getBoard() {
         if(i == 0) {
             std::cout << "  ";
             for(unsigned int k = 0; k != board[i].size(); ++k) {
-                std::cout << " " << k << " ";
+                if(k < 10) {
+                    std::cout << " " << k << " ";
+                }
+                else {
+                    std::cout << " " << k;
+                }
+                
             }
             std::cout << std::endl;
             std::cout << "  ";
@@ -131,7 +137,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
 		col = col * TENS_PLACE + (int)(x[i] - '0');
 	}
 
-    int deck_count = 0;
+    int four_conditions = 0;
 
     //Check location validation
     if(row >= 0 && row < board.size() && col >=0 && col < board[0].size()) {
@@ -141,31 +147,55 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
             for (int i = 0; i < NEIGHBOURS; i++) {
                 unsigned int neighbour_x = nx[i] + row;
                 unsigned int neighbour_y = ny[i] + col;
+                //Check if this neighbour is edge
                 if (neighbour_x < 0 || neighbour_x >= board.size() || neighbour_y < 0 || neighbour_y >= board[0].size()) {
-                    deck_count += 1;
+                    four_conditions += 1;
                     neighbour += 1;
                 }
                 else {
                     Tile* t = board[neighbour_x][neighbour_y];
+                    //Check if this tile is the first tile in the board
                     if(!(*first)) {
-                        if (t->getColour() == EMPTY_TILE || t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
-                        deck_count += 1;
+                        if (t->getColour() == EMPTY_TILE) {
+                        four_conditions += 1;
                         }
                     }
                     else {
-                        if(neighbour < 3 && t->getColour() == ' ') {
-                            deck_count += 1;
+                        //Check 3 other neighbours are either empty tile or edge
+                        if(neighbour < 3 && t->getColour() == EMPTY_TILE) {
+                            four_conditions += 1;
                             neighbour += 1;
                         }
-                        else if (t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) {
-                            deck_count += 1;
+                        else if ((t->getShape() == tile->getShape() || t->getColour() == tile->getColour()) 
+                                    && !(t->getShape() == tile->getShape() && t->getColour() == tile->getColour())) {
+                            
+                            bool duplication = false;
+                            bool stop = false;
+                            while(neighbour_x > 0 && neighbour_y > 0 && neighbour_x < board.size() 
+                                                                     && neighbour_y < board[0].size() 
+                                                                     && !duplication
+                                                                     && !stop) {
+                                neighbour_x = nx[i] + neighbour_x;
+                                neighbour_y = ny[i] + neighbour_y;
+                                std::cout << char(neighbour_x + 65) << neighbour_y << std::endl;
+                                Tile* t = board[neighbour_x][neighbour_y];
+                                if(t->getShape() == tile->getShape() && t->getColour() == tile->getColour()){
+                                    duplication = true;
+                                }      
+                                if(t->getColour() == EMPTY_TILE || (t->getShape() != tile->getShape() && t->getColour() != tile->getColour())) {
+                                    stop = true;
+                                }                               
+                            }
+                            if(!duplication) {
+                                four_conditions += 1;
+                            }
                         }                    
                     }
                 }
             }
         }
 
-        if (deck_count == ALL_CONDITONS) {
+        if (four_conditions == ALL_CONDITONS) {
             unsigned int resizedRow = 0;
             unsigned int resizedCol = 0;
             if (row == board.size() - 1 && col == board[0].size() - 1) {
@@ -198,7 +228,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
         }
     }
 	
-	return (deck_count == ALL_CONDITONS ? true : false);
+	return (four_conditions == ALL_CONDITONS ? true : false);
 }
 
 unsigned int Board::getBoardRow() {
@@ -298,7 +328,6 @@ int Board::getScore(std::string tile) {
     if(qwirkle) {
         std::cout << std::endl;
         std::cout << "QWIRKLE!!!" << std::endl;
-        std::cout << std::endl;
     }
 
 	return my_score;

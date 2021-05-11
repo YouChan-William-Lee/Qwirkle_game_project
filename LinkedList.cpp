@@ -12,7 +12,7 @@ LinkedList::~LinkedList() {
 LinkedList::LinkedList(LinkedList& other) : LinkedList() {
     head = nullptr;
     for(unsigned int i = 0; i < other.size(); ++i){
-        Tile* tile = new Tile(*other.get(i));
+        Tile* tile = new Tile(*other.getByIndex(i));
         add_back(tile);
     }
 }
@@ -26,23 +26,6 @@ unsigned int LinkedList::size() {
         current = current->next;
     }
     return length;
-}
-
-Tile* LinkedList::get(unsigned int index) {
-    Tile* retTile = nullptr;
-
-    if(index >= 0 && index < size()) {
-        unsigned int counter = 0;
-        Node* current = head;
-
-        while(counter < index) {
-            ++counter;
-            current = current->next;
-        }
-
-        retTile = current->tile;
-    }
-    return retTile;
 }
 
 Tile* LinkedList::getfront(){
@@ -175,7 +158,7 @@ void LinkedList::remove_tile(std::string tile) {
 	}
 	int index = -1;
 	for (unsigned int i = 0; index == -1 && i < this->size(); i++) {
-		Tile* t = get(i);
+		Tile* t = getByIndex(i);
 		if (t->getColour() == c && t->getShape() == s) {
 			index = i;
 		}

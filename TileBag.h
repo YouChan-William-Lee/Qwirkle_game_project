@@ -15,7 +15,6 @@
 
 class TileBag {
     public:
-    
         TileBag();
         TileBag(TileBag& other);
         ~TileBag();
@@ -23,29 +22,25 @@ class TileBag {
         //Shuffle 72 tiles
         void makeTiles();
 
-        //Returns the current size of the bag
+        //Return the current size of the bag
         unsigned int size();
+        
+        //Add this tile which has tile(string) to the bag
+        void addTileByName(std::string tile);
 
         //Get tile from the bag
         Tile* drawTile();
 
-        //Add a tile to the bag
-        void add(Tile* tile);
-
-        void addTileByName(std::string tile);
-
-        //Remove a tile from the bag
-        void remove();
-
         //Get a tile at the given index from the bag
-        Tile* get(int index);
-        
+        Tile* getByIndex(int index);
+
+        //Get a tile which has tilename(string)
         Tile* getTilebyName(std::string tilename);
 
-        bool removeTile(Tile* tile);
-
+        //Remove a tile which has tilename(string)
         void removeTile(std::string tilename);
 
+        //Add this tile to the bag
         void addTile(Tile* tile);
 
         //Removes all tiles from the bag

@@ -8,52 +8,38 @@
 
 #define MAX_HAND_SIZE    6
 
-/**
- * Represents a player in qwirkle.
- */
+//Represents a player in qwirkle
 class Player {
     public:
         Player();
         Player(Player &other);
         ~Player();
         
-        /**
-         * Sets the initial hand for the deck using the given Hand.
-         * Keeps an internal copy of the given Hand.
-         */
+        //Set the initial hand for the deck using the given Hand.
+        //Keep an internal copy of the given Hand.
         void setInitialHand(Hand* hand);
 
-        /**
-         * Return the player number
-         */
+        //Return the player's name
         std::string getPlayerName();
 
-        /**
-         * Set the player name
-         */
+        //Set the player's name
         void setPlayerName(std::string playerName);
 
-        /**
-         * Return the player score
-         */
+        //Return the player's score
         int getPlayerScore();
 
-        /**
-         * Returns the players hand
-         */
+        //Return the player's hand
         Hand* getHand();
 
-        /**
-         * Returns the tile at the given index in the players hand
-         */
-        Tile* getATile(unsigned int index);
-
+        //Update player's score
         void addScore(int addScore);
+
+        //Return the tile at the given index in the player's hand
+        Tile* getATile(unsigned int index);
 
     private:
         std::string playerName;
         int score;
-
         Hand* hand;
 };
 

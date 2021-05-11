@@ -18,8 +18,7 @@ unsigned int Hand::size() {
     return hand->size();
 }
 
-
-void Hand::add(Tile* tile) {
+void Hand::addTile(Tile* tile) {
     hand->add_back(tile);
 }
 
@@ -33,14 +32,8 @@ void Hand::addTileByName(std::string tile) {
     delete newtile;
 }
 
-Tile* Hand::drawTile() {
-    Tile* returnTile = new Tile(*hand->getfront());
-    hand->remove_front();
-    return returnTile;
-}
-
-Tile* Hand::get(int index) {
-    return hand->get(index);
+Tile* Hand::getByIndex(int index) {
+    return hand->getByIndex(index);
 }
 
 Tile* Hand::getTilebyName(std::string tilename) {
@@ -49,10 +42,6 @@ Tile* Hand::getTilebyName(std::string tilename) {
 
 void Hand::removeTile(std::string tilename) {
     hand->remove_tile(tilename);
-}
-
-void Hand::addTile(Tile* tile) {
-    hand->add_back(tile);
 }
 
 void Hand::clear() {

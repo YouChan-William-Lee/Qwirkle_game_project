@@ -20,10 +20,16 @@ class Tile {
       Tile(Tile& other);
       ~Tile();
 
+      //Get colour
       Colour getColour();
+
+      //Get shape
       Shape getShape();
 
+      //Set colour
       void setColour(Colour colour);
+
+      //Set shape
       void setShape(Shape shape);
 };
 
