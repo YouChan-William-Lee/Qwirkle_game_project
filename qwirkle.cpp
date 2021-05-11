@@ -116,7 +116,6 @@ int main(int argc, char** argv) {
 // Display goodbye message
 void goodbyeMessage() {
     std::cout << "Goodbye" << std::endl;
-    std::cout << std::endl;
 }
 
 // Display welcome message
@@ -273,6 +272,7 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
     std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
     if(player1->getPlayerScore() > player2->getPlayerScore()) {
         std::cout << "Player " << player1->getPlayerName() << " won!" << std::endl;
+        std::cout << std::endl;
     }
     else if(player1->getPlayerScore() < player2->getPlayerScore()) {
         std::cout << "Player " << player2->getPlayerName() << " won!" << std::endl;
@@ -280,6 +280,7 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
     }
     else {
         std::cout << "Draw!" << std::endl;
+        std::cout << std::endl;
     }
 }
 
@@ -514,9 +515,8 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
 
                                         if(!tilesInBoard.empty()) {
                                             // Remove spaces
-                                            remove(tilesInBoard.begin(), tilesInBoard.end(), ' ');
+                                            tilesInBoard.erase(remove(tilesInBoard.begin(), tilesInBoard.end(), ' '), tilesInBoard.end());
                                             std::stringstream ss4(tilesInBoard);  
-                                            
                                             // Split string with ,
                                             while (ss4.good()) {
                                                 std::string substr;

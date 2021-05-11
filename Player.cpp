@@ -4,7 +4,7 @@
 
 
 Player::Player() {
-    this->playerName = "Jake";
+    this->playerName = "DefalutName";
     this->score = 0;
     hand = new Hand();
 }

@@ -13,39 +13,51 @@ Enter the filename from which load a game
 > 
 Qwirkle game successfully loaded
 
-   0  1  2  3  4  5 
-  -------------------
-A |  |  |  |  |  |  |
-B |  |  |  |  |  |  |
-C |  |  |  |  |  |  |
-D |  |  |P3|P6|  |  |
-E |  |  |  |R6|  |  |
-F |  |  |  |  |  |  |
+   0  1  2  3  4  5  6  7  8  9  10 11
+  -------------------------------------
+A |  |  |  |  |  |  |  |  |  |  |  |  |
+B |  |  |G5|P5|Y5|R5|  |  |  |  |  |  |
+C |  |  |  |  |Y6|  |  |  |  |  |  |  |
+D |  |  |  |  |Y3|P3|  |  |  |  |  |  |
+E |  |  |  |  |  |R3|R2|  |  |  |  |  |
+F |  |  |  |  |  |B3|B2|B1|  |  |  |  |
+G |  |  |  |  |  |  |  |P1|  |  |  |  |
+H |  |  |  |  |  |  |  |G1|  |  |  |  |
+I |  |  |  |  |  |  |  |  |  |  |  |  |
+J |  |  |  |  |  |  |  |  |  |  |  |  |
+K |  |  |  |  |  |  |  |  |  |  |  |  |
+L |  |  |  |  |  |  |  |  |  |  |  |  |
 
-JOHN, it's your turn
-Score for JOHN: 2
-Score for WILL: 2
-Y5,O4,R2,O3,B3,G1
+WILLIAM, it's your turn
+Score for WILLIAM: 16
+Score for JOHN: 19
+P1,G6,B2,O4,Y5,B3
 > 
 Game successfully saved
 
-   0  1  2  3  4  5 
-  -------------------
-A |  |  |  |  |  |  |
-B |  |  |  |  |  |  |
-C |  |  |  |  |  |  |
-D |  |  |P3|P6|  |  |
-E |  |  |  |R6|  |  |
-F |  |  |  |  |  |  |
+   0  1  2  3  4  5  6  7  8  9  10 11
+  -------------------------------------
+A |  |  |  |  |  |  |  |  |  |  |  |  |
+B |  |  |G5|P5|Y5|R5|  |  |  |  |  |  |
+C |  |  |  |  |Y6|  |  |  |  |  |  |  |
+D |  |  |  |  |Y3|P3|  |  |  |  |  |  |
+E |  |  |  |  |  |R3|R2|  |  |  |  |  |
+F |  |  |  |  |  |B3|B2|B1|  |  |  |  |
+G |  |  |  |  |  |  |  |P1|  |  |  |  |
+H |  |  |  |  |  |  |  |G1|  |  |  |  |
+I |  |  |  |  |  |  |  |  |  |  |  |  |
+J |  |  |  |  |  |  |  |  |  |  |  |  |
+K |  |  |  |  |  |  |  |  |  |  |  |  |
+L |  |  |  |  |  |  |  |  |  |  |  |  |
 
-JOHN, it's your turn
-Score for JOHN: 2
-Score for WILL: 2
-Y5,O4,R2,O3,B3,G1
+WILLIAM, it's your turn
+Score for WILLIAM: 16
+Score for JOHN: 19
+P1,G6,B2,O4,Y5,B3
 > Invalid input
+> Game over
+Score for WILLIAM: 16
+Score for JOHN: 19
+Player JOHN won!
 
-Game over
-Score for JOHN: 2
-Score for WILL: 2
-Draw!
 Goodbye
