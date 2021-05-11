@@ -15,6 +15,7 @@
 #define MAXIMUM_VECTOR_SIZE 26
 #define ALL_CONDITONS 4
 #define NEIGHBOURS 4
+#define MYSELF 1
 
 Board::Board() {
     board.resize(INITIAL_BOARD_ROW_SIZE, std::vector<Tile*>(INITIAL_BOARD_COL_SIZE));
@@ -171,6 +172,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
                             
                             bool duplication = false;
                             bool stop = false;
+                            //Check neighbour's neighbour if they are same as this tile
                             while(neighbour_x > 0 && neighbour_y > 0 && neighbour_x < board.size() 
                                                                      && neighbour_y < board[0].size() 
                                                                      && !duplication
@@ -179,13 +181,18 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
                                 neighbour_y = ny[i] + neighbour_y;
                                 std::cout << char(neighbour_x + 65) << neighbour_y << std::endl;
                                 Tile* t = board[neighbour_x][neighbour_y];
+                                //If this neighbour is same as this tile, it means there is duplication
                                 if(t->getShape() == tile->getShape() && t->getColour() == tile->getColour()){
                                     duplication = true;
                                 }      
+
+                                //If this neighbour is empty tile or none of shape and colour is differnt with this tile, stop searching
                                 if(t->getColour() == EMPTY_TILE || (t->getShape() != tile->getShape() && t->getColour() != tile->getColour())) {
                                     stop = true;
                                 }                               
                             }
+
+                            //If there is no duplication, it satisfies the condition
                             if(!duplication) {
                                 four_conditions += 1;
                             }
@@ -195,9 +202,11 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
             }
         }
 
+        //If this tile satisfies all four condtions
         if (four_conditions == ALL_CONDITONS) {
             unsigned int resizedRow = 0;
             unsigned int resizedCol = 0;
+            //If this tile is on the corner
             if (row == board.size() - 1 && col == board[0].size() - 1) {
                 resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
                 resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
@@ -209,6 +218,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
                 }
                 reSize(resizedRow, resizedCol);
             }
+            //If this tile is on the edge of row
             else if(row == board.size() - 1) {
                 resizedRow = board.size() + INITIAL_BOARD_ROW_SIZE;
                 resizedCol = board[0].size();
@@ -217,6 +227,7 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
                 }
                 reSize(resizedRow, resizedCol);
             }
+            //If this tile is on the edge of col
             else if(col == board[0].size() - 1) {
                 resizedRow = board.size();
                 resizedCol = board[0].size() + INITIAL_BOARD_COL_SIZE;
@@ -265,7 +276,8 @@ int Board::getScore(std::string tile) {
 
     //Check all tiles there are near by me
 	int num_of_top = 0;
-	for (int i = row - 1; i > -1; --i) { //Check up
+    //Check UP
+	for (int i = row - 1; i > -1; --i) {
 		Tile* t = board[i][col];
 		if (t->getShape() == EMPTY_TILE) {
 			i = -1; //Stop
@@ -276,7 +288,8 @@ int Board::getScore(std::string tile) {
 	}
 
 	int num_of_bot = 0;
-	for (unsigned int i = row + 1; i < board.size(); ++i) { //Check bot
+    //Check BOTTOM
+	for (unsigned int i = row + 1; i < board.size(); ++i) {
 		Tile* t = board[i][col];
 		if (t->getShape() == EMPTY_TILE) {
 			i = board.size(); //Stop
@@ -287,7 +300,8 @@ int Board::getScore(std::string tile) {
 	}
 
 	int num_of_left = 0;
-	for (int i = col -1 ; i > -1; --i) { //Check left
+    //Check LEFT
+	for (int i = col -1 ; i > -1; --i) {
 		Tile* t = board[row][i];
 		if (t->getShape() == EMPTY_TILE) {
 			i = -1; //Stop
@@ -298,10 +312,11 @@ int Board::getScore(std::string tile) {
 	}
 
 	int num_of_right = 0;
-	for (unsigned int i = col + 1; i < board[0].size(); ++i) { //Check right
+    //Check RIGHT
+	for (unsigned int i = col + 1; i < board[0].size(); ++i) {
 		Tile* t = board[row][i];
 		if (t->getShape() == EMPTY_TILE) {
-			i = board[0].size(); //Stop
+			i = board[0].size();
 		}
 		else {
 			num_of_right += 1;
@@ -309,20 +324,22 @@ int Board::getScore(std::string tile) {
 	}
 
     bool qwirkle = false;
+    //If there are total 6 tiles including myself in a column
     if(num_of_top + num_of_bot == QWIRKLE_NUMBER_WITHOUT_MYSELF) {
         my_score += QWIRKLE_POINTS;
         qwirkle = true;
     }
     else if(num_of_top != 0 || num_of_bot != 0) {
-        my_score += num_of_top + num_of_bot + 1;
+        my_score += num_of_top + num_of_bot + MYSELF;
     }
 
+    ////If there are total 6 tiles including myself in a row
     if(num_of_left + num_of_right == QWIRKLE_NUMBER_WITHOUT_MYSELF) {
         my_score += QWIRKLE_POINTS;
         qwirkle = true;
     }
     else if(num_of_left != 0 || num_of_right != 0) {
-        my_score += num_of_left + num_of_right + 1;
+        my_score += num_of_left + num_of_right + MYSELF;
     }
 
     if(qwirkle) {

@@ -8,7 +8,6 @@
 
 class LinkedList {
     public:
-
         LinkedList();
         ~LinkedList();
         LinkedList(LinkedList& other);
