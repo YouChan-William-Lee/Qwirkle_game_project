@@ -276,6 +276,7 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
     }
     else if(player1->getPlayerScore() < player2->getPlayerScore()) {
         std::cout << "Player " << player2->getPlayerName() << " won!" << std::endl;
+        std::cout << std::endl;
     }
     else {
         std::cout << "Draw!" << std::endl;
@@ -434,103 +435,159 @@ void loadupGame(TileBag* tilebag, Board* board, Player* player1, Player* player2
             //Read player1 name
             std::string player1name = "";
             std::getline(file, player1name);
-            player1->setPlayerName(player1name);
+            if(!player1name.empty()) {
+                player1->setPlayerName(player1name);
 
-            //Read player1 score
-            std::string player1score = "";
-            std::getline(file, player1score);
-            player1->addScore(std::stoi(player1score));
+                std::string player1score = "";
+                std::getline(file, player1score);
+                if(!player1score.empty()) {
+                    player1->addScore(std::stoi(player1score));
 
-            //Read player1 hand
-            std::string player1hand = "";
-            std::getline(file, player1hand);
-            std::stringstream ss1(player1hand);
-            Hand* initialHand1 = new Hand();
-            
-            // Split string with ','
-            while (ss1.good()) {
-                std::string substr;
-                getline(ss1, substr, ',');
-                initialHand1->addTileByName(substr);
+                    //Read player1 hand
+                    std::string player1hand = "";
+                    std::getline(file, player1hand);
+                    if(!player1hand.empty()) {
+                        std::stringstream ss1(player1hand);
+                        Hand* initialHand1 = new Hand();
+                        
+                        // Split string with ','
+                        while (ss1.good()) {
+                            std::string substr;
+                            getline(ss1, substr, ',');
+                            initialHand1->addTileByName(substr);
+                        }
+                        player1->setInitialHand(initialHand1);
+                        delete initialHand1;
+
+                        //Read player2 name
+                        std::string player2name = "";
+                        std::getline(file, player2name);
+                        if(!player2name.empty()) {
+                            player2->setPlayerName(player2name);
+
+                            //Read player2 score
+                            std::string player2score = "";
+                            std::getline(file, player2score);
+                            if(!player2score.empty()) {
+                                player2->addScore(std::stoi(player2score));
+
+                                //Read player2 hand
+                                std::string player2hand = "";
+                                std::getline(file, player2hand);
+
+                                if(!player2hand.empty()) {
+                                    std::stringstream ss2(player2hand);
+                                    Hand* initialHand2 = new Hand();
+                                    
+                                    // Split string with ','
+                                    while (ss2.good()) {
+                                        std::string substr;
+                                        getline(ss2, substr, ',');
+                                        initialHand2->addTileByName(substr);
+                                    }
+                                    player2->setInitialHand(initialHand2);
+                                    delete initialHand2;
+
+                                    //Read board size
+                                    std::string boardsize;
+                                    std::getline(file, boardsize);
+
+                                    if(!boardsize.empty()) {
+                                        std::stringstream ss3(boardsize);  
+                                        // boardRowCol has row and col size of the board
+                                        int boardRowCol[2] = {};      
+                                        int i = 0;
+
+                                        // Split string with ,
+                                        while (ss3.good()) {
+                                            std::string substr;
+                                            getline(ss3, substr, ',');
+                                            boardRowCol[i] = std::stoi(substr);
+                                            ++i;
+                                        }
+                                        // Resize the board with new row and col size
+                                        board->reSize(boardRowCol[0], boardRowCol[1]);
+
+                                        // Read tiles in board
+                                        std::string tilesInBoard;
+                                        std::getline(file, tilesInBoard);
+
+                                        if(!tilesInBoard.empty()) {
+                                            // Remove spaces
+                                            remove(tilesInBoard.begin(), tilesInBoard.end(), ' ');
+                                            std::stringstream ss4(tilesInBoard);  
+                                            
+                                            // Split string with ,
+                                            while (ss4.good()) {
+                                                std::string substr;
+                                                getline(ss4, substr, ',');
+                                                board->setTiles(substr);
+                                            }
+
+                                            //Read tileBag
+                                            std::string tilebagString = "";
+                                            std::getline(file, tilebagString);
+                                            if(!tilebagString.empty()) {
+                                                std::stringstream ss5(tilebagString);
+
+                                                // Split string with ,
+                                                while (ss5.good()) {
+                                                    std::string substr;
+                                                    getline(ss5, substr, ',');
+                                                    tilebag->addTileByName(substr);
+                                                }
+
+                                                //Read player turn
+                                                //We already know the player who saved this files is the player1 and this is player1's turn
+                                                std::cout << std::endl;
+                                                std::cout << "Qwirkle game successfully loaded" << std::endl;
+                                                std::cout << std::endl;
+                                                loadSuccess = true;
+                                            }
+                                            else {
+                                                invalidInput();
+                                            showInstruction = false;
+                                            }
+                                        }
+                                        else {
+                                            invalidInput();
+                                            showInstruction = false;
+                                        }
+                                    }
+                                    else {
+                                        invalidInput();
+                                        showInstruction = false;
+                                    }
+                                }
+                                else {
+                                    invalidInput();
+                                    showInstruction = false;
+                                }
+                            }
+                            else {
+                                invalidInput();
+                                showInstruction = false;
+                            }
+                        }
+                        else {
+                            invalidInput();
+                            showInstruction = false;
+                        }
+                    }
+                    else {
+                        invalidInput();
+                        showInstruction = false;
+                    }
+                }
+                else {
+                    invalidInput();
+                    showInstruction = false;
+                }
             }
-            player1->setInitialHand(initialHand1);
-            delete initialHand1;
-
-            //Read player2 name
-            std::string player2name = "";
-            std::getline(file, player2name);
-            player2->setPlayerName(player2name);
-
-            //Read player2 score
-            std::string player2score = "";
-            std::getline(file, player2score);
-            player2->addScore(std::stoi(player2score));
-
-            //Read player2 hand
-            std::string player2hand = "";
-            std::getline(file, player2hand);
-            std::stringstream ss2(player2hand);
-            Hand* initialHand2 = new Hand();
-            
-            // Split string with ','
-            while (ss2.good()) {
-                std::string substr;
-                getline(ss2, substr, ',');
-                initialHand2->addTileByName(substr);
+            else {
+                invalidInput();
+                showInstruction = false;
             }
-            player2->setInitialHand(initialHand2);
-            delete initialHand2;
-
-            //Read board size
-            std::string boardsize;
-            std::getline(file, boardsize);
-            std::stringstream ss3(boardsize);  
-            // boardRowCol has row and col size of the board
-            int boardRowCol[2] = {};      
-            int i = 0;
-
-            // Split string with ,
-            while (ss3.good()) {
-                std::string substr;
-                getline(ss3, substr, ',');
-                boardRowCol[i] = std::stoi(substr);
-                ++i;
-            }
-            // Resize the board with new row and col size
-            board->reSize(boardRowCol[0], boardRowCol[1]);
-
-            // Read tiles in board
-            std::string tilesInBoard;
-            std::getline(file, tilesInBoard);
-            // Remove spaces
-            remove(tilesInBoard.begin(), tilesInBoard.end(), ' ');
-            std::stringstream ss4(tilesInBoard);  
-            
-            // Split string with ,
-            while (ss4.good()) {
-                std::string substr;
-                getline(ss4, substr, ',');
-                board->setTiles(substr);
-            }
-
-            //Read tileBag
-            std::string tilebagString = "";
-            std::getline(file, tilebagString);
-            std::stringstream ss5(tilebagString);
-
-            // Split string with ,
-            while (ss5.good()) {
-                std::string substr;
-                getline(ss5, substr, ',');
-                tilebag->addTileByName(substr);
-            }
-
-            //Read player turn
-            //We already know the player who saved this files is the player1 and this is player1's turn
-            std::cout << std::endl;
-            std::cout << "Qwirkle game successfully loaded" << std::endl;
-            std::cout << std::endl;
-            loadSuccess = true;
         }
     }
 }
