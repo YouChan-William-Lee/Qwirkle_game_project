@@ -95,7 +95,7 @@ Colour changeStringToColour(std::string c) {
     char blue[] = "B";
     char purple[] = "P";
 
-    Colour colour = ' ';
+    Colour colour = EMPTY_TILE;
 
     if (c == red) {
         colour = RED;
@@ -122,7 +122,7 @@ Shape changeStringToShape(std::string s) {
     char star_6[] = "5";
     char clover[] = "6";
 
-    Shape shape = ' ';
+    Shape shape = int(EMPTY_TILE);
 
     if (s == circle) {
         shape = CIRCLE;

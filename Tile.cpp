@@ -2,7 +2,7 @@
 
 Tile::Tile() {
     this->colour = EMPTY_TILE;
-    this->shape = EMPTY_TILE;
+    this->shape = int(EMPTY_TILE);
 }
 
 Tile::Tile(Colour colour, Shape shape) {

@@ -17,6 +17,7 @@ Player::Player(Player &other) {
 Player::~Player() {
     hand->clear();
     delete hand;
+    hand = nullptr;
 }
     
 void Player::setInitialHand(Hand* hand) {

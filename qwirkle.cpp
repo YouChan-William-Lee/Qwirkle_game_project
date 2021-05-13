@@ -257,11 +257,12 @@ void newGame(Player* player1, Player* player2) {
 void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player2) {
     int turn = 0;
     // Only first tile can placed on anywhere on the board 
-    bool value1 = false;
+    bool value1 = board->tileOnTheBoard();
     bool* PlaceTheFirstTile = &value1;
     // Instruction will be shown when player turn is changed 
     bool value2 = true;
     bool* showInstruction = &value2;
+
 	while (!std::cin.eof() && tilebag->size() != 0 && player1->getHand()->size() != 0 && player2->getHand()->size() != 0) {
 		if (turn == 0) {
 			turn += player_turn(board, tilebag, player1, player2, PlaceTheFirstTile, showInstruction);
@@ -271,6 +272,14 @@ void playTheGame(TileBag* tilebag, Board* board, Player* player1, Player* player
 		}
 		turn %= 2;
 	}
+
+    //If game is done, display the board lastly before terminate
+    if((tilebag->size() == 0 || player1->getHand()->size() == 0 || player2->getHand()->size() == 0)
+        && (player1->getPlayerScore() != 0 && player2->getPlayerScore() !=0)) {
+        board->getBoard();
+        std::cout << std::endl;
+    }
+
     std::cout << "Game over" << std::endl;
     std::cout << "Score for " << player1->getPlayerName() << ": " << player1->getPlayerScore() << std::endl;
     std::cout << "Score for " << player2->getPlayerName() << ": " << player2->getPlayerScore() << std::endl;
@@ -401,7 +410,8 @@ int player_turn(Board* board, TileBag* TileBag, Player* p_turn, Player* p_wait, 
         std::cout << std::endl;
         std::cout << "Game successfully saved" << std::endl;
         std::cout << std::endl;
-        *showInstruction = true;
+        std::cout << "> ";
+        *showInstruction = false;
 	}
     else {
         invalidInput();
