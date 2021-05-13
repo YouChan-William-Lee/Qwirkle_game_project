@@ -179,7 +179,6 @@ bool Board::check(std::string x, Tile* tile, bool* first) {
                                                                      && !stop) {
                                 neighbour_x = nx[i] + neighbour_x;
                                 neighbour_y = ny[i] + neighbour_y;
-                                std::cout << char(neighbour_x + 65) << neighbour_y << std::endl;
                                 Tile* t = board[neighbour_x][neighbour_y];
                                 //If this neighbour is same as this tile, it means there is duplication
                                 if(t->getShape() == tile->getShape() && t->getColour() == tile->getColour()){

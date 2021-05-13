@@ -7,7 +7,11 @@
 
 #define NUM_OF_STUDENT 4
 #define NUM_OF_STUDENT_INFO 3
-#define LOAD_FILE_LINES 10
+#define NEWGAME "1"
+#define LOADGAME "2"
+#define CREDITS "3"
+#define QUIT "4"
+
 
 #include "LinkedList.h"
 #include "TileBag.h"
@@ -46,8 +50,8 @@ int main(int argc, char** argv) {
         std::string menu = "";
         std::cin >> menu;
 
-        if(menu >= "1" && menu <= "4") {
-            if(menu == "1") {
+        if(menu >= NEWGAME && menu <= QUIT) {
+            if(menu == NEWGAME) {
 
                 // Make a new TileBag
                 TileBag* tileBag = new TileBag();
@@ -72,7 +76,7 @@ int main(int argc, char** argv) {
 
                 play = false;
             } 
-            else if(menu == "2") {
+            else if(menu == LOADGAME) {
                 TileBag* tileBag = new TileBag();
  
                 Board* board = new Board();
@@ -89,7 +93,7 @@ int main(int argc, char** argv) {
 
                 play = false;            
             } 
-            else if(menu == "3") {
+            else if(menu == CREDITS) {
                 // Show students credits
                 credits();
                 // Show mainMenu again
